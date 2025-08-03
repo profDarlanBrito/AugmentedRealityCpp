@@ -65,6 +65,7 @@ private:
 	GLuint ebo = 0; // Element Buffer Object (if needed)
     GLuint vboColors = 0; // Vertex Buffer Object for colors (if needed)
 	GLuint vboTextures = 0; // Vertex Buffer Object for textures (if needed)
+    GLuint vboNormals = 0; // Vertex Buffer Object for normals (if needed)
 	GLuint graphicsPipelineShaderProgram = 0; // Graphics Pipeline Object
     int verticesSize = 0; // Size of vertices, if needed
     float offsetZ = 0.0f; // Offset for Y-axis, if needed

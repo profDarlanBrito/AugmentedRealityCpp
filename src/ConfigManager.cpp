@@ -1,11 +1,15 @@
 #include "ConfigManager.h"
 #include <stdexcept>
 using namespace YAML;
+
+/**
+* @brief ConfigManager constructor that initializes default values.
+*/
 ConfigManager::ConfigManager() {
     // Default constructor initializes with default values
     windowWidth = 800;
     windowHeight = 600;
-    testMode = "OpenGL";
+    runMode = "OpenGL";
     VertexShaderFileName = "../../../shaders/vertex_shader.glsl";
     FragmentShaderFileName = "../../../shaders/fragment_shader.glsl";
     cameraPosition = glm::vec3(0.0f, 0.0f, 5.0f);
@@ -15,6 +19,11 @@ ConfigManager::ConfigManager() {
     cameraAspectRatio = static_cast<float>(windowWidth) / static_cast<float>(windowHeight);
     backgroundColor = glm::vec3(0.3f, 0.3f, 0.3f);
 }
+/**
+* @brief ConfigManager constructor that loads configuration from a YAML file.
+* @param filename The path to the YAML configuration file.
+* @throws std::runtime_error if the file cannot be loaded or parsed.
+*/
 ConfigManager::ConfigManager(const std::string& filename) {
     try {
         config = YAML::LoadFile(filename);
@@ -23,12 +32,19 @@ ConfigManager::ConfigManager(const std::string& filename) {
     }
     windowWidth = 800;
     windowHeight = 600;
-    testMode = "OpenGL";
+    runMode = "OpenGL";
     VertexShaderFileName = "../../../shaders/vertex_shader.glsl";
     FragmentShaderFileName = "../../../shaders/fragment_shader.glsl";
 	Load();
 }
 
+/**
+* @brief Loads configuration values from the YAML file.
+* @note This function checks for the existence of each key and retrieves its value.
+* @note If add a key in the YAML file, it should be added here to ensure it is loaded correctly.
+* @note If you add a new key to the YAML file be sure to change the operator= function to copy the new key from another ConfigManager object.
+* @return true if all keys were found and loaded successfully, false otherwise.
+*/
 bool ConfigManager::Load() {
 	bool success = true;
     if (HasKey("window_width")) {
@@ -47,11 +63,11 @@ bool ConfigManager::Load() {
 		std::cerr << "Key 'window_height' not found in the configuration file." << std::endl;
         success = false;
     }
-    if (HasKey("test mode")) {
-        testMode = Get<std::string>("test mode");
-        std::cout << "Modo de teste: " << testMode << std::endl;
+    if (HasKey("run_mode")) {
+        runMode = Get<std::string>("run_mode");
+        std::cout << "Modo de teste: " << runMode << std::endl;
     } else {
-        std::cerr << "Key 'test_mode' not found in the configuration file." << std::endl;
+        std::cerr << "Key 'run_mode' not found in the configuration file." << std::endl;
         success = false;
     }
     if (HasKey("vertex_Shader_file")) {
@@ -142,19 +158,43 @@ bool ConfigManager::Load() {
         std::cerr << "Key 'camera aspect ratio' not found in the configuration file." << std::endl;
         success = false;
     }
-    
+    if (HasKey("mouse_sensitivity")) {
+        mouseSensitivity = Get<float>("mouse_sensitivity");
+        if (mouseSensitivity > 0.0f) {
+            std::cout << "Sensibilidade do mouse: " << mouseSensitivity << std::endl;
+        } else {
+            std::cerr << "Invalid 'mouse_sensitivity' value in the configuration file." << std::endl;
+            success = false;
+        }
+    } else {
+        std::cerr << "Key 'mouse sensitivity' not found in the configuration file." << std::endl;
+        success = false;
+	}
     if (!success) {
         std::cerr << "Some configuration values were not loaded successfully." << std::endl;
+	}
+    if (HasKey("mouse_move_enabled")) {
+        mouseMoveEnabled = Get<bool>("mouse_move_enabled");
+        std::cout << "Mouse movement enabled: " << (mouseMoveEnabled ? "true" : "false") << std::endl;
+    } else {
+        std::cerr << "Key 'mousemove_enabled' not found in the configuration file." << std::endl;
+        success = false;
 	}
 	return success;
 }
 
+/**
+* @brief Assignment operator for ConfigManager.
+* @param other The ConfigManager object to copy from.
+* @return A reference to the current ConfigManager object.
+* @note This operator allows for copying the configuration values from another ConfigManager object.
+*/
 ConfigManager& ConfigManager::operator=(const ConfigManager& other)
 {
     if (this != &other) {
         windowWidth = other.windowWidth;
         windowHeight = other.windowHeight;
-        testMode = other.testMode;
+        runMode = other.runMode;
         VertexShaderFileName = other.VertexShaderFileName;
         FragmentShaderFileName = other.FragmentShaderFileName;
         cameraPosition = other.cameraPosition;
@@ -163,6 +203,8 @@ ConfigManager& ConfigManager::operator=(const ConfigManager& other)
         cameraFar = other.cameraFar;
         cameraAspectRatio = other.cameraAspectRatio;
         backgroundColor = other.backgroundColor;
+		mouseMoveEnabled = other.mouseMoveEnabled;
+		mouseSensitivity = other.mouseSensitivity;
     }
     return *this;
 }

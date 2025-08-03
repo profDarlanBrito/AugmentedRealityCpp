@@ -29,7 +29,8 @@ add_executable (AugmentedReality
                 "src/GLMath.cpp" 
                 "src/glad.c"
                 "include/ConfigManager.h"
-                "src/ConfigManager.cpp")
+                "src/ConfigManager.cpp"
+                "src/OpenCVManipulations.cpp")
 
 
 if (CMAKE_VERSION VERSION_GREATER 3.13)
@@ -54,3 +55,7 @@ target_link_libraries(AugmentedReality PRIVATE yaml-cpp::yaml-cpp)
 
 find_package(tinyobjloader CONFIG REQUIRED)
 target_link_libraries(AugmentedReality PRIVATE tinyobjloader::tinyobjloader)
+
+find_package(OpenCV CONFIG REQUIRED)
+target_include_directories(AugmentedReality PRIVATE ${OpenCV_INCLUDE_DIRS})
+target_link_libraries(AugmentedReality PRIVATE ${OpenCV_LIBS})

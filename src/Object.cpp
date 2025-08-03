@@ -7,7 +7,6 @@ GLuint Object::LoadTexture(const std::string& filePath, SDL_Window* window)
 	int width, height, nrChannels;
 	SDL_Surface* surface = nullptr;
 	if (filePath.empty()) {
-		std::cerr << "Texture file path is empty." << std::endl;
 		surface = SDL_LoadBMP(textureFilePath.c_str());
 	}
 	else {
@@ -59,9 +58,8 @@ GLuint Object::LoadTexture(const std::string& filePath, SDL_Window* window)
 		glActiveTexture(GL_TEXTURE0);
 
 	} else {
-		std::cerr << "Failed to load texture: " << filePath << std::endl;
+		std::cerr << "Failed to load texture or texture not found: " << filePath << std::endl;
 		std::cerr << "SDL Error: " << SDL_GetError() << std::endl;
-		std::exit(EXIT_FAILURE);
 	}
 	SDL_DestroySurface(surface); // Clean up the surface
 	return textureID; // Return the texture ID
@@ -141,5 +139,11 @@ bool Object::LoadFromOBJ(const std::string& filePath)
 	verticesTextureCoords = attrib.texcoords;
 	verticesSize = vertices.size();
 	textureFilePath = materials[0].diffuse_texname;
+	if (textureFilePath.empty()) {
+		std::cerr << "No texture file specified in the OBJ file. Loading default color." << std::endl;
+		// If no texture is specified, you can set a default color or handle it accordingly
+		verticesColors.resize(verticesSize, 1.0f); // Default color white
+		return false;
+	}
 	return true;
 }

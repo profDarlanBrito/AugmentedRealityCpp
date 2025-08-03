@@ -22,24 +22,48 @@ public:
 	float mAspectRatio = 16.0f / 9.0f; // Proporção da tela (pode ser ajustada conforme necessário)
 	// Método para obter a matriz de visualização da câmera
 
+	/**
+	* @brief Generates the view matrix for the camera.
+	* @see https://www.youtube.com/watch?v=cFHX5gSMjTs&list=PLvv0ScY6vfd9zlZkIIqGDeG5TUWswkMox&index=31 youtube video explaining how to implement the getViewMatrix function in a camera class
+	* @return The view matrix as a glm::mat4.
+	*/
 	glm::mat4 getViewMatrix() const
 	{
-		// O segundo parâmetro de glm::lookAt deve ser o ponto para onde a câmera está olhando (target), não a direção.
- 		// Portanto, precisamos somar a direção de visão à posição da câmera.
+		// The second parameter of glm::lookAt should be the point the camera is looking at (target), not the direction.
+		// So we need to add the view direction to the camera position.
 		return glm::lookAt(mEye, mEye + mViewDirection, mUpDirection);
 	}
+
+	/**
+	* @brief Default constructor for the Camera class.
+	*/
 	Camera() : mEye(0.0f, 0.0f, 0.0f), mViewDirection(0.0f, 0.0f, -1.0f), mUpDirection(0.0f, 1.0f, 0.0f) {}
+
+	/**
+	* @brief Constructor for the Camera class with specified parameters.
+	*/
 	Camera(const glm::vec3& eye, const glm::vec3& viewDirection, const glm::vec3& upDirection) {
 		mEye = eye;
 		mViewDirection = glm::normalize(viewDirection);
 		mUpDirection = glm::normalize(upDirection);
 	}
+	/**
+	* @brief Sets the position of the camera.
+	*/
 	void setPosition(const glm::vec3& eye) {
 		mEye = eye;
 	}
+	/**
+	* @brief Sets the view direction of the camera.
+	*/
 	void setViewDirection(const glm::vec3& viewDirection) {
 		mViewDirection = glm::normalize(viewDirection);
 	}
+
+	/**
+	* @brief Sets the up direction of the camera.
+	* @note The up direction should be normalized to ensure correct camera orientation. The up direction is typically a vector pointing upwards in the world space, such as (0, 1, 0).
+	*/
 	void setUpDirection(const glm::vec3& upDirection) {
 		mUpDirection = glm::normalize(upDirection);
 	}

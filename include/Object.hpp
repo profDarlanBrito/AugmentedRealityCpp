@@ -84,7 +84,7 @@ private:
 	std::vector<GLuint> indices;
 	std::vector<GLfloat> verticesNormals; // Optional, if you need normals
 	std::vector<GLfloat> verticesTextureCoords; // Optional, if you need texture coordinates
-	GLuint textureID; // Texture ID for OpenGL
+	GLuint textureID = -1; // Texture ID for OpenGL
 	GLuint verticesSize; // Size of the vertices vector
 	std::string textureFilePath; // File path for the object file
 };

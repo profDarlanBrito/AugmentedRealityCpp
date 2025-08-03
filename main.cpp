@@ -1,19 +1,26 @@
 #include <iostream>
 #include "AugmentedReality.h"
 #include "ConfigManager.h"
+#include "OpenCVManipulations.hpp"
 
 using namespace std;
-
+/**
+* @brief Main function to run the Augmented Reality application.
+* @note This function initializes the Augmented Reality application, loads the configuration from a YAML file, and starts the OpenGL rendering loop if the test mode is set to "OpenGL".
+* @see AugmentedReality
+* @see IMPORTANT: AFTER COMPILING THE CODE FIRST TIME VERIFY IF CMAKEFILE HAS COMMANDS DESCRIBED IN THE OUTPUT WINDOW.
+* @return 0 if the application runs successfully, -1 if there is an error in initialization or configuration.
+*/
 int main()
 {
 	// Initialize the Augmented Reality application
 	AugmentedReality arApp;
     //arApp.object.TestTexture();
-	arApp.object.LoadFromOBJ("../../../models/Plane_with_image.obj");
+	arApp.object.LoadFromOBJ("../../../models/Cubo.obj");
 	ConfigManager cfg("../../../resources/config.yaml");
 	arApp.cfg = cfg; // Load configuration from YAML file
-	std::cout << arApp.cfg.testMode << std::endl;
-    if (arApp.cfg.testMode == "OpenGL") {
+	std::cout << arApp.cfg.runMode << std::endl;
+    if (arApp.cfg.runMode == "OpenGL") {
         cout << "Initializing OpenGL ..." << endl;
         // Initialize SDL and OpenGL context
         if (!arApp.InitializeSDL()) {
@@ -61,6 +68,10 @@ int main()
         arApp.Run();
         return 0;
     }
+    else if (arApp.cfg.runMode == "OpenCV") {
+		OpenCVManipulations::Run();
+        return 0;
+	}
 	else {  
         std::cerr << "Invalid mode specified in config file. Expected 'OpenGL'." << std::endl;
         return -1;

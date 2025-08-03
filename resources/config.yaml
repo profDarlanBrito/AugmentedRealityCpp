@@ -1,12 +1,17 @@
 # Configuration file for the application
 # This file contains settings for the application, such as window size and fullscreen mode.
 
-test mode: OpenGL
+#General settings
+# Run mode can be 'test_OpenCV' or 'OpenGL'
+run_mode: OpenCV
+
+# OpenGL settings
 window_width: 800
 window_height: 600
 fullscreen: false
 vertex_Shader_file: ../../../resources/vertexShader.glsl
 fragment_Shader_file: ../../../resources/fragmentShader.glsl
+mouse_sensitivity: 1.0
 
 #Camera settings
 camera_position: [0.0, 0.0, 3.0]
@@ -15,3 +20,4 @@ camera_aspect_ratio: -1
 camera_near_plane: 0.1
 camera_far_plane: 10.0
 background_color: [0.2, 0.2, 0.2]
+mouse_move_enabled: false

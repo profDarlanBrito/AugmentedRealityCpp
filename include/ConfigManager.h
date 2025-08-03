@@ -9,7 +9,7 @@ class ConfigManager {
 public:
 	int windowWidth;
 	int windowHeight;
-	std::string testMode;
+	std::string runMode;
 	std::string VertexShaderFileName;
 	std::string FragmentShaderFileName;
 	glm::vec3 cameraPosition;
@@ -18,6 +18,8 @@ public:
 	float cameraFar;
 	float cameraAspectRatio;
 	glm::vec3 backgroundColor;
+    float mouseSensitivity;
+	bool mouseMoveEnabled;
 
 
     ConfigManager();
