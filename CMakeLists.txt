@@ -30,7 +30,8 @@ add_executable (AugmentedReality
                 "src/glad.c"
                 "include/ConfigManager.h"
                 "src/ConfigManager.cpp"
-                "src/OpenCVManipulations.cpp")
+                "src/OpenCVManipulations.cpp" 
+                "src/OpenGLManipulations.cpp")
 
 
 if (CMAKE_VERSION VERSION_GREATER 3.13)

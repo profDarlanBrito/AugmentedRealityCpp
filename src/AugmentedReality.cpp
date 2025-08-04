@@ -294,8 +294,9 @@ void AugmentedReality::HandleEvents()
 */ 
 void AugmentedReality::CreateGraphicsPipeline(const std::string vertexShaderFileName,const std::string fragmentShaderFileName,bool debugOn)
 {
-    // Create the shader program
     object.LoadTexture("", window); // Load texture if needed
+
+    // Create the shader program
     graphicsPipelineShaderProgram = shaderOps.CreateShaderProgramFromFiles(vertexShaderFileName, fragmentShaderFileName);
     if (graphicsPipelineShaderProgram == 0) {
         std::cerr << "Failed to create shader program." << std::endl;

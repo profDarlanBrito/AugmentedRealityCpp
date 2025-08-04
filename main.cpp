@@ -2,6 +2,7 @@
 #include "AugmentedReality.h"
 #include "ConfigManager.h"
 #include "OpenCVManipulations.hpp"
+#include "OpenGLManipulations.hpp"
 
 using namespace std;
 /**
@@ -20,7 +21,7 @@ int main()
 	ConfigManager cfg("../../../resources/config.yaml");
 	arApp.cfg = cfg; // Load configuration from YAML file
 	std::cout << arApp.cfg.runMode << std::endl;
-    if (arApp.cfg.runMode == "OpenGL") {
+    if (arApp.cfg.runMode == "AugmentedReality") {
         cout << "Initializing OpenGL ..." << endl;
         // Initialize SDL and OpenGL context
         if (!arApp.InitializeSDL()) {
@@ -72,6 +73,9 @@ int main()
 		OpenCVManipulations::Run();
         return 0;
 	}
+    else if (cfg.runMode == "OpenGL") {
+		OpenGLManipulations::Run();
+    }
 	else {  
         std::cerr << "Invalid mode specified in config file. Expected 'OpenGL'." << std::endl;
         return -1;

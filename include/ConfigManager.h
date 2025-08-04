@@ -5,6 +5,10 @@
 #include <iostream>
 #include <glm/glm.hpp>
 
+#ifndef CONFIG_FILE_PATH_NAME
+#define CONFIG_FILE_PATH_NAME "../../../resources/config.yaml"
+#endif // !CONFIG_FILE_PATH_NAME
+
 class ConfigManager {
 public:
 	int windowWidth;
@@ -12,12 +16,17 @@ public:
 	std::string runMode;
 	std::string VertexShaderFileName;
 	std::string FragmentShaderFileName;
+	glm::vec3 backgroundColor;
+
+	// Camera parameters
 	glm::vec3 cameraPosition;
+	glm::vec3 cameraViewDirection;
+	glm::vec3 cameraUpDirection;
+
     float cameraFov;
 	float cameraNear;
 	float cameraFar;
 	float cameraAspectRatio;
-	glm::vec3 backgroundColor;
     float mouseSensitivity;
 	bool mouseMoveEnabled;
 

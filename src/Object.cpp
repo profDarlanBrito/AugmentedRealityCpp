@@ -110,7 +110,6 @@ void Object::TestTexture() {
 	return;
 }
 
-
 bool Object::LoadFromOBJ(const std::string& filePath)
 {
 	tinyobj::ObjReader reader;
@@ -145,5 +144,6 @@ bool Object::LoadFromOBJ(const std::string& filePath)
 		verticesColors.resize(verticesSize, 1.0f); // Default color white
 		return false;
 	}
+	textureLoaded = true; // Set the texture loaded flag to true
 	return true;
 }

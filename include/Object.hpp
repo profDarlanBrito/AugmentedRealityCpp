@@ -13,6 +13,7 @@ public:
 	Object() {
 		// Constructor implementation
 		verticesSize = 0; // Initialize vertices size
+		textureID = 0; // Initialize texture ID
 	}
 	~Object() {
 		// Destructor implementation
@@ -76,6 +77,9 @@ public:
 	GLuint GetVerticesSize() const {
 		return verticesSize; // Return the size of the vertices vector
 	}
+	bool IsTextureLoaded() const {
+		return textureLoaded; // Return whether the texture is loaded
+	}
 	bool LoadFromOBJ(const std::string& filePath);
 private:
 	// Private member variables and methods
@@ -84,9 +88,10 @@ private:
 	std::vector<GLuint> indices;
 	std::vector<GLfloat> verticesNormals; // Optional, if you need normals
 	std::vector<GLfloat> verticesTextureCoords; // Optional, if you need texture coordinates
-	GLuint textureID = -1; // Texture ID for OpenGL
+	GLuint textureID; // Texture ID for OpenGL
 	GLuint verticesSize; // Size of the vertices vector
 	std::string textureFilePath; // File path for the object file
+	bool textureLoaded = false; // Flag to check if texture is loaded
 };
 
 #endif // OBJECT_HPP

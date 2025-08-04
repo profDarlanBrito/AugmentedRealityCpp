@@ -2,6 +2,7 @@
 #include <stdexcept>
 using namespace YAML;
 
+
 /**
 * @brief ConfigManager constructor that initializes default values.
 */
@@ -18,6 +19,8 @@ ConfigManager::ConfigManager() {
     cameraFar = 100.0f;
     cameraAspectRatio = static_cast<float>(windowWidth) / static_cast<float>(windowHeight);
     backgroundColor = glm::vec3(0.3f, 0.3f, 0.3f);
+	mouseMoveEnabled = true;
+	mouseSensitivity = 0.1f; // Default mouse sensitivity
 }
 /**
 * @brief ConfigManager constructor that loads configuration from a YAML file.
@@ -97,6 +100,35 @@ bool ConfigManager::Load() {
         std::cerr << "Key 'camera_position' not found in the configuration file." << std::endl;
         success = false;
 	}
+
+    if (HasKey("camera_view_direction")) {
+        auto cameraViewDir = Get<std::vector<float>>("camera_view_direction");
+        if (cameraViewDir.size() == 3) {
+            cameraViewDirection = glm::vec3(cameraViewDir[0], cameraViewDir[1], cameraViewDir[2]);
+            std::cout << "Direção de visão da câmera: " << cameraViewDirection.x << ", " << cameraViewDirection.y << ", " << cameraViewDirection.z << std::endl;
+        } else {
+            std::cerr << "Invalid 'camera_view_direction' format in the configuration file." << std::endl;
+            success = false;
+        }
+    }
+    else {
+        std::cerr << "Key 'camera_view_direction' not found in the configuration file." << std::endl;
+        success = false;
+    }
+    if (HasKey("camera_up_direction")) {
+        auto cameraUpDir = Get<std::vector<float>>("camera_up_direction");
+        if (cameraUpDir.size() == 3) {
+            cameraUpDirection = glm::vec3(cameraUpDir[0], cameraUpDir[1], cameraUpDir[2]);
+            std::cout << "Direção para cima da câmera: " << cameraUpDirection.x << ", " << cameraUpDirection.y << ", " << cameraUpDirection.z << std::endl;
+        } else {
+            std::cerr << "Invalid 'camera_up_direction' format in the configuration file." << std::endl;
+            success = false;
+        }
+    }
+    else {
+        std::cerr << "Key 'camera_up_direction' not found in the configuration file." << std::endl;
+        success = false;
+    }
     if (HasKey("background_color")) {
         auto bgColor = Get<std::vector<float>>("background_color");
         if (bgColor.size() == 3) {
@@ -205,6 +237,8 @@ ConfigManager& ConfigManager::operator=(const ConfigManager& other)
         backgroundColor = other.backgroundColor;
 		mouseMoveEnabled = other.mouseMoveEnabled;
 		mouseSensitivity = other.mouseSensitivity;
+        cameraViewDirection = other.cameraViewDirection;
+	    cameraUpDirection = other.cameraUpDirection;
     }
     return *this;
 }

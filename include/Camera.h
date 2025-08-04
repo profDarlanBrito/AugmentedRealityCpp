@@ -1,3 +1,6 @@
+#ifndef CAMERA_H
+#define CAMERA_H
+
 #include "GLMath.h"
 
 class Camera
@@ -91,3 +94,4 @@ public:
 	}
 	void processMouseMovement(float xoffset, float yoffset);
 };
+#endif // !CAMERA_HPP
