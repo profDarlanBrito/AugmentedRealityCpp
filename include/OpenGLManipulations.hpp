@@ -71,12 +71,14 @@ private:
 	int windowHeight = 600; // Default window height
 	// Other private members for OpenGL manipulations can be added here
 	GLuint graphicsPipelineShaderProgram = 0; // Shader program ID
+	/*
 	GLuint vao = 0; // Vertex Array Object ID
 	GLuint vbo = 0; // Vertex Buffer Object ID
 	GLuint ebo = 0; // Element Buffer Object ID
 	GLuint vboColors = 0; // Vertex Buffer Object for colors
 	GLuint vboTextures = 0; // Vertex Buffer Object for textures
 	GLuint vboNormals = 0; // Vertex Buffer Object for normals	
+	*/
 	bool debugOn = true; // Flag to enable OpenGL debug output
 	glm::vec3 cameraTranslation; // Camera translation
 	float rotationAngle; // Rotation angle for the object

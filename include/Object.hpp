@@ -104,6 +104,13 @@ public:
 		}
 		return *this;
 	}
+	GLuint vao = 0; // Vertex Array Object ID
+	GLuint vbo = 0; // Vertex Buffer Object ID
+	GLuint ebo = 0; // Element Buffer Object ID
+	GLuint vboColors = 0; // Vertex Buffer Object for colors
+	GLuint vboTextures = 0; // Vertex Buffer Object for textures
+	GLuint vboNormals = 0; // Vertex Buffer Object for normals	
+
 private:
 	// Private member variables and methods
 	std::vector<GLfloat> vertices;

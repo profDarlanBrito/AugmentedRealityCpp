@@ -33,16 +33,16 @@ void Camera::processMouseMovement(float xoffset, float yoffset)
     mPitch += yoffset;
 
     // Use a função clamp local
-    mPitch = clamp(mPitch, -90.0f, 90.0f);
+    mPitch = clamp(mPitch, -89.0f, 89.0f);
 
     glm::vec3 front;
     front.x = cos(glm::radians(mYaw)) * cos(glm::radians(mPitch));
     front.y = sin(glm::radians(mPitch));
     front.z = sin(glm::radians(mYaw)) * cos(glm::radians(mPitch));
     mFront = glm::normalize(front);
-
+	mViewDirection = mFront;
     mRight = glm::normalize(glm::cross(mFront, mWorldUp));
-    mUp    = glm::normalize(glm::cross(mRight, mFront));
+    mUpDirection = glm::normalize(glm::vec3(glm::rotate(glm::mat4(1.0f), glm::radians(mRoll), mFront) * glm::vec4(mWorldUp, 0.0f)));
 }
 
 

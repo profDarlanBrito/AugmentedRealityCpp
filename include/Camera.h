@@ -12,10 +12,10 @@ private:
 	// Adicione os campos para yaw e pitch
 	float mYaw = -90.0f;      // Yaw inicial (olhando para -Z)
 	float mPitch = 0.0f;      // Pitch inicial
+	float mRoll = 0.0f;       // Roll inicial (opcional, geralmente não usado em câmeras 3D)
 	glm::vec3 mFront = glm::vec3(0.0f, 0.0f, -1.0f); // Adicionado para uso em processMouseMovement
 	glm::vec3 mRight = glm::vec3(1.0f, 0.0f, 0.0f);  // Opcional, usado em processMouseMovement
 	glm::vec3 mWorldUp = glm::vec3(0.0f, 1.0f, 0.0f); // Opcional, usado em processMouseMovement
-	glm::vec3 mUp = glm::vec3(0.0f, 1.0f, 0.0f); // Direção "para cima" da câmera
 
 
 public:
@@ -71,7 +71,7 @@ public:
 		mUpDirection = glm::normalize(upDirection);
 	}
     glm::mat4 getViewMatrix(){
-        return glm::lookAt(mEye, mViewDirection, mUp);
+        return glm::lookAt(mEye, mViewDirection, mUpDirection);
 	}
 
 	void MoveForward(float distance)

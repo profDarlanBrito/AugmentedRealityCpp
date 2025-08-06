@@ -197,18 +197,19 @@ void OpenGLManipulations::MainLoop()
 */
 bool OpenGLManipulations::VertexGPUAlocation()
 {
-	// Generate and bind the Vertex Array Object (VAO)
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
 
-    for (Object object : objects) {
+    for (auto& object : objects) {
+        // Generate and bind the Vertex Array Object (VAO)
+        glGenVertexArrays(1, &object.vao);
+        glBindVertexArray(object.vao);
+
         // VBO positions
         if (object.GetVertices().size() == 0) {
             std::cerr << "Error: No vertices provided for VBO." << std::endl;
             return false; // Handle error appropriately
         }
-        glGenBuffers(1, &vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glGenBuffers(1, &object.vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, object.vbo);
         glBufferData(GL_ARRAY_BUFFER,
             object.GetVertices().size() * sizeof(GLfloat),
             object.GetVertices().data(),
@@ -218,8 +219,8 @@ bool OpenGLManipulations::VertexGPUAlocation()
 
         // VBO de cores
         if (object.GetVerticesColors().size() > 0) {
-            glGenBuffers(1, &vboColors);
-            glBindBuffer(GL_ARRAY_BUFFER, vboColors);
+            glGenBuffers(1, &object.vboColors);
+            glBindBuffer(GL_ARRAY_BUFFER, object.vboColors);
             glBufferData(GL_ARRAY_BUFFER,
                 object.GetVerticesColors().size() * sizeof(GLfloat),
                 object.GetVerticesColors().data(),
@@ -231,8 +232,8 @@ bool OpenGLManipulations::VertexGPUAlocation()
         // VBO de textures
         if (object.GetVerticesTextureCoords().size() > 0) {
             std::cout << "Using texture coordinates." << std::endl;
-            glGenBuffers(1, &vboTextures);
-            glBindBuffer(GL_ARRAY_BUFFER, vboTextures);
+            glGenBuffers(1, &object.vboTextures);
+            glBindBuffer(GL_ARRAY_BUFFER, object.vboTextures);
             glBufferData(GL_ARRAY_BUFFER,
                 object.GetVerticesTextureCoords().size() * sizeof(GLfloat),
                 object.GetVerticesTextureCoords().data(),
@@ -252,16 +253,16 @@ bool OpenGLManipulations::VertexGPUAlocation()
         else {
             normals = std::vector<GLfloat>({ 0.0f, 0.0f, 1.0f }); // Default normal if not provided
         }
-        glGenBuffers(1, &vboNormals);
-        glBindBuffer(GL_ARRAY_BUFFER, vboNormals);
+        glGenBuffers(1, &object.vboNormals);
+        glBindBuffer(GL_ARRAY_BUFFER, object.vboNormals);
         glBufferData(GL_ARRAY_BUFFER,
             normals.size() * sizeof(GLfloat),
             normals.data(),
             GL_STATIC_DRAW);
         glEnableVertexAttribArray(3);
         glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-        glGenBuffers(1, &ebo);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+        glGenBuffers(1, &object.ebo);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, object.ebo);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, object.GetIndices().size() * sizeof(GLuint), object.GetIndices().data(), GL_STATIC_DRAW);
     }
 
@@ -303,25 +304,25 @@ void OpenGLManipulations::PreDraw()
     glClearColor(cfg.backgroundColor.r, cfg.backgroundColor.g, cfg.backgroundColor.b, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-    // Use the shader program
-    glUseProgram(graphicsPipelineShaderProgram);
-
-    glm::mat4 perspective = glm::perspective(glm::radians(camera.mFov), camera.mAspectRatio, camera.mNear, camera.mFar);
-    rotationAngle = 0.0f; // Reset rotation angle after applying it
-	scaleFactor = glm::vec3(1.0f); // Reset scale factor after applying it
-	modelTranslation = glm::vec3(0.0f); // Reset model translation after applying it
-    
-    // Set the uniform for the model matrix
-    // Note: Ensure that the shader program has the uniform variables defined
-    // Get the uniform locations
-    GLint uModelMatrixLocation = glGetUniformLocation(graphicsPipelineShaderProgram, U_MODEL_MATRIX);
-    GLint uPerspectiveMatrixLocation = glGetUniformLocation(graphicsPipelineShaderProgram, U_PERSPECTIVE_MATRIX);
-    GLint uViewMatrixLocation = glGetUniformLocation(graphicsPipelineShaderProgram, U_VIEW_MATRIX);
-    GLint uTextureLocation = glGetUniformLocation(graphicsPipelineShaderProgram, U_TEXTURE);
-    GLint uLoadTextureLocation = glGetUniformLocation(graphicsPipelineShaderProgram, U_LOAD_TEXTURE);
-
-    // Set the uniform for the offset
     for (Object object : objects) {
+        // Use the shader program
+        glUseProgram(graphicsPipelineShaderProgram);
+
+        glm::mat4 perspective = glm::perspective(glm::radians(camera.mFov), camera.mAspectRatio, camera.mNear, camera.mFar);
+        rotationAngle = 0.0f; // Reset rotation angle after applying it
+        scaleFactor = glm::vec3(1.0f); // Reset scale factor after applying it
+        modelTranslation = glm::vec3(0.0f); // Reset model translation after applying it
+
+        // Set the uniform for the model matrix
+        // Note: Ensure that the shader program has the uniform variables defined
+        // Get the uniform locations
+        GLint uModelMatrixLocation = glGetUniformLocation(graphicsPipelineShaderProgram, U_MODEL_MATRIX);
+        GLint uPerspectiveMatrixLocation = glGetUniformLocation(graphicsPipelineShaderProgram, U_PERSPECTIVE_MATRIX);
+        GLint uViewMatrixLocation = glGetUniformLocation(graphicsPipelineShaderProgram, U_VIEW_MATRIX);
+        GLint uTextureLocation = glGetUniformLocation(graphicsPipelineShaderProgram, U_TEXTURE);
+        GLint uLoadTextureLocation = glGetUniformLocation(graphicsPipelineShaderProgram, U_LOAD_TEXTURE);
+
+        // Set the uniform for the offset
         object.SetModelMatrix(glm::scale(glm::rotate(
             glm::translate(object.GetModelMatrix(),
                 modelTranslation),
@@ -347,23 +348,26 @@ void OpenGLManipulations::PreDraw()
             std::cerr << "Uniform 'uTexture' not found in shader program." << std::endl;
             std::exit(EXIT_FAILURE); // Exit if the texture uniform is not found
         }
+        if (uPerspectiveMatrixLocation != -1) {
+            glUniformMatrix4fv(uPerspectiveMatrixLocation, 1, GL_FALSE, glm::value_ptr(perspective));
+        }
+        else {
+            std::cerr << "Uniform 'uPerspectiveMatrix' not found in shader program." << std::endl;
+            std::exit(EXIT_FAILURE); // Exit if the texture uniform is not found
+        }
+        if (uViewMatrixLocation != -1) {
+            glUniformMatrix4fv(uViewMatrixLocation, 1, GL_FALSE, glm::value_ptr(camera.getViewMatrix()));
+        }
+        else {
+            std::cerr << "Uniform 'uViewMatrix' not found in shader program." << std::endl;
+            std::exit(EXIT_FAILURE); // Exit if the texture uniform is not found
+        }
+        // Bind the VAO
+        glBindVertexArray(object.vao);
+
+        glDrawElements(GL_TRIANGLES, object.GetVerticesSize(), GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
     }
-    if (uPerspectiveMatrixLocation != -1) {
-        glUniformMatrix4fv(uPerspectiveMatrixLocation, 1, GL_FALSE, glm::value_ptr(perspective));
-    }
-    else {
-        std::cerr << "Uniform 'uPerspectiveMatrix' not found in shader program." << std::endl;
-        std::exit(EXIT_FAILURE); // Exit if the texture uniform is not found
-    }
-    if (uViewMatrixLocation != -1) {
-        glUniformMatrix4fv(uViewMatrixLocation, 1, GL_FALSE, glm::value_ptr(camera.getViewMatrix()));
-    }
-    else {
-        std::cerr << "Uniform 'uViewMatrix' not found in shader program." << std::endl;
-        std::exit(EXIT_FAILURE); // Exit if the texture uniform is not found
-    }
-    // Bind the VAO
-    glBindVertexArray(vao);
 }
 
 /**
@@ -374,11 +378,11 @@ void OpenGLManipulations::PreDraw()
 void OpenGLManipulations::Draw()
 {
     // Draw the triangle
-    for (Object object : objects) {
+    /*for (Object object : objects) {
         glDrawElements(GL_TRIANGLES, object.GetVerticesSize(), GL_UNSIGNED_INT, 0);
-    }
+    }*/
     // Unbind the VAO
-    glBindVertexArray(0);
+    //glBindVertexArray(0);
     // Swap buffers
     SDL_GL_SwapWindow(window);
 }
@@ -420,16 +424,17 @@ void OpenGLManipulations::Run()
     
 	// Load the 3D object from the specified file
 	app.objects.push_back(Object::LoadFromOBJ("../../../models/Cubo.obj"));
+	app.objects.push_back(Object::LoadFromOBJ("../../../models/Cubo2.obj"));
     if(!app.VertexGPUAlocation()) {
         std::cerr << "Failed to allocate GPU resources for vertices." << std::endl;
-        std::exit(EXIT_SUCCESS);
+        std::exit(EXIT_FAILURE);
 	}
-	app.VertexGPUAlocation();
     if(app.debugOn) {
         glEnable(GL_DEBUG_OUTPUT);
         glDebugMessageCallback(MessageCallback, nullptr);
 	}
 	app.camera = Camera(app.cfg.cameraPosition, app.cfg.cameraViewDirection, app.cfg.cameraUpDirection);
 	// Start the main loop
+
 	app.MainLoop();
 }
