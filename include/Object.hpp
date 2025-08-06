@@ -7,10 +7,11 @@
 #include <SDL3_image/SDL_image.h>
 #include <SDL3/SDL_surface.h>
 #include <tiny_obj_loader.h>
+#include <glm/glm.hpp>
 
 class Object {
 public:
-	Object() {
+	Object(): modelMatrix(1.0f) {
 		// Constructor implementation
 		verticesSize = 0; // Initialize vertices size
 		textureID = 0; // Initialize texture ID
@@ -80,7 +81,29 @@ public:
 	bool IsTextureLoaded() const {
 		return textureLoaded; // Return whether the texture is loaded
 	}
-	bool LoadFromOBJ(const std::string& filePath);
+	static Object LoadFromOBJ(const std::string& filePath);
+	glm::mat4 GetModelMatrix() const {
+		return modelMatrix;
+	}
+	void SetModelMatrix(const glm::mat4& newModelMatrix) {
+		modelMatrix = newModelMatrix;
+	}
+	// Sobrecarga do operador de atribuição
+	Object& operator=(const Object& other) {
+		if (this != &other) {
+			vertices = other.vertices;
+			verticesColors = other.verticesColors;
+			indices = other.indices;
+			verticesNormals = other.verticesNormals;
+			verticesTextureCoords = other.verticesTextureCoords;
+			textureID = other.textureID;
+			verticesSize = other.verticesSize;
+			textureFilePath = other.textureFilePath;
+			textureLoaded = other.textureLoaded;
+			modelMatrix = other.modelMatrix;
+		}
+		return *this;
+	}
 private:
 	// Private member variables and methods
 	std::vector<GLfloat> vertices;
@@ -92,6 +115,7 @@ private:
 	GLuint verticesSize; // Size of the vertices vector
 	std::string textureFilePath; // File path for the object file
 	bool textureLoaded = false; // Flag to check if texture is loaded
+	glm::mat4 modelMatrix; // Model matrix for transformations
 };
 
 #endif // OBJECT_HPP

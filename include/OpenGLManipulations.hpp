@@ -38,15 +38,26 @@ public:
 		scaleFactor(1.0f, 1.0f, 1.0f),
 		rotationAngle(0.0f),
 		cameraTranslation(0.0f, 0.0f, 5.0f),
-		modelMatrix(1.0f),
-		object()
+		modelMatrix(1.0f)
 	{
 		// Constructor implementation
 		running = false; // Initialize running state
 	}
 	~OpenGLManipulations();
 	static void Run();
+	glm::mat4 GetModelMatrix() const {
+		return modelMatrix;
+	}
+	void SetModelMatrix(const glm::mat4& newModelMatrix) {
+		modelMatrix = newModelMatrix;
+	}
 private:
+	ShaderOperations shaderOps; // Shader operations object
+	ConfigManager cfg; // Configuration manager object
+	Camera camera; // Camera object for handling camera operations
+	std::vector<Object> objects; // Object to be rendered
+
+
 	bool InitializeSDL();
 	void MainLoop();
 	bool VertexGPUAlocation();
@@ -59,11 +70,7 @@ private:
 	int windowWidth = 800; // Default window width
 	int windowHeight = 600; // Default window height
 	// Other private members for OpenGL manipulations can be added here
-	ShaderOperations shaderOps; // Shader operations object
-	ConfigManager cfg; // Configuration manager object
-	Camera camera; // Camera object for handling camera operations
 	GLuint graphicsPipelineShaderProgram = 0; // Shader program ID
-	Object object; // Object to be rendered
 	GLuint vao = 0; // Vertex Array Object ID
 	GLuint vbo = 0; // Vertex Buffer Object ID
 	GLuint ebo = 0; // Element Buffer Object ID

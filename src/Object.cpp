@@ -113,13 +113,14 @@ void Object::TestTexture() {
 	return;
 }
 
-bool Object::LoadFromOBJ(const std::string& filePath)
+Object Object::LoadFromOBJ(const std::string& filePath)
 {
+	Object obj;
 	tinyobj::ObjReader reader;
 	if (!reader.ParseFromFile(filePath)) {
 		std::cerr << "Erro ao carregar arquivo OBJ: " << filePath << std::endl;
 		if (!reader.Error().empty()) std::cerr << "tinyobjloader: " << reader.Error() << std::endl;
-		return false;
+		return obj;
 	}
 	if (!reader.Warning().empty()) std::cout << "tinyobjloader: " << reader.Warning() << std::endl;
 
@@ -127,29 +128,29 @@ bool Object::LoadFromOBJ(const std::string& filePath)
 	const auto& shapes = reader.GetShapes();
 	const auto& materials = reader.GetMaterials();
 
-	vertices.clear();
-	verticesTextureCoords.clear();
-	indices.clear();
+	obj.vertices.clear();
+	obj.verticesTextureCoords.clear();
+	obj.indices.clear();
 
 	for (const auto& shape : shapes) {
 		for (const auto& idx : shape.mesh.indices) {
 			// Indexes of the vertices
-			indices.push_back(idx.vertex_index);
+			obj.indices.push_back(idx.vertex_index);
 		}
 	}
-	vertices = attrib.GetVertices();
-	verticesTextureCoords = attrib.texcoords;
-	verticesSize = vertices.size();
-	textureFilePath = materials[0].diffuse_texname;
-	if (textureFilePath.empty()) {
+	obj.vertices = attrib.GetVertices();
+	obj.verticesTextureCoords = attrib.texcoords;
+	obj.verticesSize = obj.vertices.size();
+	obj.textureFilePath = materials[0].diffuse_texname;
+	if (obj.textureFilePath.empty()) {
 		std::cerr << "No texture file specified in the OBJ file. Loading default color." << std::endl;
 		// If no texture is specified, you can set a default color or handle it accordingly
-		verticesColors.resize(verticesSize, 1.0f); // Default color white
+		obj.verticesColors.resize(obj.verticesSize, 1.0f); // Default color white
 	}
 	else {
-		LoadTexture(textureFilePath);
-		textureLoaded = true; // Set the texture loaded flag to true
+		obj.LoadTexture(obj.textureFilePath);
+		obj.textureLoaded = true; // Set the texture loaded flag to true
 
 	}
-	return true;
+	return obj;
 }

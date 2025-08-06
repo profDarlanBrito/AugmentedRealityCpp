@@ -146,7 +146,7 @@ void OpenGLManipulations::HandleEvents()
 */
 void OpenGLManipulations::CreateGraphicsPipeline(const std::string& vertexShaderFileName, const std::string& fragmentShaderFileName, bool debugOn)
 {
-    object.LoadTexture(""); // Load texture if needed
+    //object.LoadTexture(""); // Load texture if needed
 
     // Create the shader program
     graphicsPipelineShaderProgram = shaderOps.CreateShaderProgramFromFiles(vertexShaderFileName, fragmentShaderFileName);
@@ -169,7 +169,9 @@ void OpenGLManipulations::CreateGraphicsPipeline(const std::string& vertexShader
 
 }
 
-
+/**
+* @brief Main loop for the OpenGL application.
+*/
 void OpenGLManipulations::MainLoop()
 {
     // Main loop
@@ -199,68 +201,69 @@ bool OpenGLManipulations::VertexGPUAlocation()
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
-	// VBO positions
-    if (object.GetVertices().size() == 0) {
-        std::cerr << "Error: No vertices provided for VBO." << std::endl;
-        return false; // Handle error appropriately
-	}
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER,
-		object.GetVertices().size() * sizeof(GLfloat),
-		object.GetVertices().data(),
-		GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-	// VBO de cores
-    if (object.GetVerticesColors().size() > 0) {
-        glGenBuffers(1, &vboColors);
-        glBindBuffer(GL_ARRAY_BUFFER, vboColors);
+    for (Object object : objects) {
+        // VBO positions
+        if (object.GetVertices().size() == 0) {
+            std::cerr << "Error: No vertices provided for VBO." << std::endl;
+            return false; // Handle error appropriately
+        }
+        glGenBuffers(1, &vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glBufferData(GL_ARRAY_BUFFER,
-            object.GetVerticesColors().size() * sizeof(GLfloat),
-            object.GetVerticesColors().data(),
+            object.GetVertices().size() * sizeof(GLfloat),
+            object.GetVertices().data(),
             GL_STATIC_DRAW);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	}
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-	// VBO de textures
-	if (object.GetVerticesTextureCoords().size() > 0) {
-		std::cout << "Using texture coordinates." << std::endl;
-		glGenBuffers(1, &vboTextures);
-		glBindBuffer(GL_ARRAY_BUFFER, vboTextures);
-		glBufferData(GL_ARRAY_BUFFER,
-			object.GetVerticesTextureCoords().size() * sizeof(GLfloat),
-			object.GetVerticesTextureCoords().data(),
-			GL_STATIC_DRAW);
-		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	}
-	else {
-		std::cout << "No texture coordinates provided." << std::endl;
-	}
+        // VBO de cores
+        if (object.GetVerticesColors().size() > 0) {
+            glGenBuffers(1, &vboColors);
+            glBindBuffer(GL_ARRAY_BUFFER, vboColors);
+            glBufferData(GL_ARRAY_BUFFER,
+                object.GetVerticesColors().size() * sizeof(GLfloat),
+                object.GetVerticesColors().data(),
+                GL_STATIC_DRAW);
+            glEnableVertexAttribArray(1);
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+        }
 
-	// VBO de normals
-    std::vector<GLfloat> normals;
-    if (object.GetVerticesNormals().size() > 0) {
-		normals = object.GetVerticesNormals(); // Default normal if not provided
+        // VBO de textures
+        if (object.GetVerticesTextureCoords().size() > 0) {
+            std::cout << "Using texture coordinates." << std::endl;
+            glGenBuffers(1, &vboTextures);
+            glBindBuffer(GL_ARRAY_BUFFER, vboTextures);
+            glBufferData(GL_ARRAY_BUFFER,
+                object.GetVerticesTextureCoords().size() * sizeof(GLfloat),
+                object.GetVerticesTextureCoords().data(),
+                GL_STATIC_DRAW);
+            glEnableVertexAttribArray(2);
+            glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+        }
+        else {
+            std::cout << "No texture coordinates provided." << std::endl;
+        }
+
+        // VBO de normals
+        std::vector<GLfloat> normals;
+        if (object.GetVerticesNormals().size() > 0) {
+            normals = object.GetVerticesNormals(); // Default normal if not provided
+        }
+        else {
+            normals = std::vector<GLfloat>({ 0.0f, 0.0f, 1.0f }); // Default normal if not provided
+        }
+        glGenBuffers(1, &vboNormals);
+        glBindBuffer(GL_ARRAY_BUFFER, vboNormals);
+        glBufferData(GL_ARRAY_BUFFER,
+            normals.size() * sizeof(GLfloat),
+            normals.data(),
+            GL_STATIC_DRAW);
+        glEnableVertexAttribArray(3);
+        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+        glGenBuffers(1, &ebo);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, object.GetIndices().size() * sizeof(GLuint), object.GetIndices().data(), GL_STATIC_DRAW);
     }
-    else {
-        normals = std::vector<GLfloat>({ 0.0f, 0.0f, 1.0f }); // Default normal if not provided
-    }
-    glGenBuffers(1, &vboNormals);
-    glBindBuffer(GL_ARRAY_BUFFER, vboNormals);
-    glBufferData(GL_ARRAY_BUFFER,
-        normals.size() * sizeof(GLfloat),
-        normals.data(),
-        GL_STATIC_DRAW);
-    glEnableVertexAttribArray(3);
-    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-	glGenBuffers(1, &ebo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, object.GetIndices().size() * sizeof(GLuint), object.GetIndices().data(), GL_STATIC_DRAW);
 
 	// Unbind the VBO and EBO
 	glBindVertexArray(0);
@@ -302,18 +305,7 @@ void OpenGLManipulations::PreDraw()
 
     // Use the shader program
     glUseProgram(graphicsPipelineShaderProgram);
-    
-    // Set the uniform for the offset
-    /*glm::mat4 translation = glm::translate(modelMatrix, modelTranslation);
-    glm::mat4 rotate = glm::rotate(translation, glm::radians(rotationAngle), glm::vec3(0.0f, 1.0f, 0.0f));
-    glm::mat4 scale = glm::scale(rotate, scaleFactor);
-    modelMatrix = scale;*/
-    modelMatrix = glm::scale(glm::rotate(
-                                         glm::translate(modelMatrix, 
-                                                        modelTranslation), 
-                                         glm::radians(rotationAngle), glm::vec3(0.0f, 1.0f, 0.0f)), 
-                             scaleFactor);
-    
+
     glm::mat4 perspective = glm::perspective(glm::radians(camera.mFov), camera.mAspectRatio, camera.mNear, camera.mFar);
     rotationAngle = 0.0f; // Reset rotation angle after applying it
 	scaleFactor = glm::vec3(1.0f); // Reset scale factor after applying it
@@ -328,12 +320,33 @@ void OpenGLManipulations::PreDraw()
     GLint uTextureLocation = glGetUniformLocation(graphicsPipelineShaderProgram, U_TEXTURE);
     GLint uLoadTextureLocation = glGetUniformLocation(graphicsPipelineShaderProgram, U_LOAD_TEXTURE);
 
-    if (uModelMatrixLocation != -1) {
-        glUniformMatrix4fv(uModelMatrixLocation, 1, GL_FALSE, glm::value_ptr(modelMatrix));
-    }
-    else {
-        std::cerr << "Uniform 'uModelMatrix' not found in shader program." << std::endl;
-        std::exit(EXIT_FAILURE); // Exit if the texture uniform is not found
+    // Set the uniform for the offset
+    for (Object object : objects) {
+        object.SetModelMatrix(glm::scale(glm::rotate(
+            glm::translate(object.GetModelMatrix(),
+                modelTranslation),
+            glm::radians(rotationAngle), glm::vec3(0.0f, 1.0f, 0.0f)),
+            scaleFactor));
+        if (uModelMatrixLocation != -1) {
+            glUniformMatrix4fv(uModelMatrixLocation, 1, GL_FALSE, glm::value_ptr(object.GetModelMatrix()));
+        }
+        else {
+            std::cerr << "Uniform 'uModelMatrix' not found in shader program." << std::endl;
+            std::exit(EXIT_FAILURE); // Exit if the texture uniform is not found
+        }
+        if (uTextureLocation != -1) {
+            if (object.IsTextureLoaded()) {
+                glUniform1i(uTextureLocation, 0); // Assuming texture unit 0
+                glUniform1i(uLoadTextureLocation, 1); // Load the texture ID
+            }
+            else {
+                glUniform1i(uLoadTextureLocation, 0); // No load the texture ID
+            }
+        }
+        else {
+            std::cerr << "Uniform 'uTexture' not found in shader program." << std::endl;
+            std::exit(EXIT_FAILURE); // Exit if the texture uniform is not found
+        }
     }
     if (uPerspectiveMatrixLocation != -1) {
         glUniformMatrix4fv(uPerspectiveMatrixLocation, 1, GL_FALSE, glm::value_ptr(perspective));
@@ -349,19 +362,6 @@ void OpenGLManipulations::PreDraw()
         std::cerr << "Uniform 'uViewMatrix' not found in shader program." << std::endl;
         std::exit(EXIT_FAILURE); // Exit if the texture uniform is not found
     }
-    if (uTextureLocation != -1) {
-        if (object.IsTextureLoaded()) {
-            glUniform1i(uTextureLocation, 0); // Assuming texture unit 0
-            glUniform1i(uLoadTextureLocation, 1); // Load the texture ID
-        }
-        else {
-            glUniform1i(uLoadTextureLocation, 0); // No load the texture ID
-        }
-    }
-    else {
-        std::cerr << "Uniform 'uTexture' not found in shader program." << std::endl;
-        std::exit(EXIT_FAILURE); // Exit if the texture uniform is not found
-    }
     // Bind the VAO
     glBindVertexArray(vao);
 }
@@ -374,7 +374,9 @@ void OpenGLManipulations::PreDraw()
 void OpenGLManipulations::Draw()
 {
     // Draw the triangle
-    glDrawElements(GL_TRIANGLES, object.GetVerticesSize(), GL_UNSIGNED_INT, 0);
+    for (Object object : objects) {
+        glDrawElements(GL_TRIANGLES, object.GetVerticesSize(), GL_UNSIGNED_INT, 0);
+    }
     // Unbind the VAO
     glBindVertexArray(0);
     // Swap buffers
@@ -415,7 +417,9 @@ void OpenGLManipulations::Run()
 
 	app.object.SetVertexSpecification(vertices, verticesColors, index);
     */
-    app.object.LoadFromOBJ("../../../models/Cubo.obj");
+    
+	// Load the 3D object from the specified file
+	app.objects.push_back(Object::LoadFromOBJ("../../../models/Cubo.obj"));
     if(!app.VertexGPUAlocation()) {
         std::cerr << "Failed to allocate GPU resources for vertices." << std::endl;
         std::exit(EXIT_SUCCESS);
