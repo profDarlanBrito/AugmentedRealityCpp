@@ -146,7 +146,7 @@ void OpenGLManipulations::HandleEvents()
 */
 void OpenGLManipulations::CreateGraphicsPipeline(const std::string& vertexShaderFileName, const std::string& fragmentShaderFileName, bool debugOn)
 {
-    object.LoadTexture("", window); // Load texture if needed
+    object.LoadTexture(""); // Load texture if needed
 
     // Create the shader program
     graphicsPipelineShaderProgram = shaderOps.CreateShaderProgramFromFiles(vertexShaderFileName, fragmentShaderFileName);
@@ -394,6 +394,7 @@ void OpenGLManipulations::Run()
         std::cerr << "Failed to create shader program." << std::endl;
         return;
 	}
+    /*
     // Define vertex data
     const std::vector<GLfloat> vertices = {
         -0.5f, -0.5f, 0.0f, // Bottom left
@@ -413,12 +414,13 @@ void OpenGLManipulations::Run()
     };
 
 	app.object.SetVertexSpecification(vertices, verticesColors, index);
-
+    */
+    app.object.LoadFromOBJ("../../../models/Cubo.obj");
     if(!app.VertexGPUAlocation()) {
         std::cerr << "Failed to allocate GPU resources for vertices." << std::endl;
         std::exit(EXIT_SUCCESS);
 	}
-
+	app.VertexGPUAlocation();
     if(app.debugOn) {
         glEnable(GL_DEBUG_OUTPUT);
         glDebugMessageCallback(MessageCallback, nullptr);

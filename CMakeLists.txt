@@ -28,9 +28,7 @@ add_executable (AugmentedReality
                 "include/GLMath.h" 
                 "src/GLMath.cpp" 
                 "src/glad.c"
-                "include/ConfigManager.h"
-                "src/ConfigManager.cpp"
-                "src/OpenCVManipulations.cpp" 
+                "src/ConfigManager.cpp" 
                 "src/OpenGLManipulations.cpp")
 
 
@@ -60,3 +58,4 @@ target_link_libraries(AugmentedReality PRIVATE tinyobjloader::tinyobjloader)
 find_package(OpenCV CONFIG REQUIRED)
 target_include_directories(AugmentedReality PRIVATE ${OpenCV_INCLUDE_DIRS})
 target_link_libraries(AugmentedReality PRIVATE ${OpenCV_LIBS})
+

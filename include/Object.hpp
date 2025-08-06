@@ -66,7 +66,7 @@ public:
 	std::vector<GLfloat> GetVerticesTextureCoords() const {
 		return verticesTextureCoords; // Optional, if you need texture coordinates
 	}
-	GLuint LoadTexture(const std::string& filePath, SDL_Window* window);
+	GLuint LoadTexture(const std::string& filePath);
 	void TestTexture();
 	GLuint GetTextureID() const {
 		return textureID; // Return the texture ID if needed

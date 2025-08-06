@@ -15,14 +15,15 @@ using namespace std;
 int main()
 {
 	// Initialize the Augmented Reality application
-	AugmentedReality arApp;
+	//AugmentedReality arApp;
     //arApp.object.TestTexture();
-	arApp.object.LoadFromOBJ("../../../models/Cubo.obj");
+	//arApp.object.LoadFromOBJ("../../../models/Cubo.obj");
 	ConfigManager cfg("../../../resources/config.yaml");
-	arApp.cfg = cfg; // Load configuration from YAML file
-	std::cout << arApp.cfg.runMode << std::endl;
-    if (arApp.cfg.runMode == "AugmentedReality") {
+	//arApp.cfg = cfg; // Load configuration from YAML file
+	//std::cout << arApp.cfg.runMode << std::endl;
+    //if (arApp.cfg.runMode == "AugmentedReality") {
         cout << "Initializing OpenGL ..." << endl;
+        /*
         // Initialize SDL and OpenGL context
         if (!arApp.InitializeSDL()) {
             cerr << "Failed to initialize SDL!" << endl;
@@ -66,10 +67,11 @@ int main()
 		arApp.camera.mFar = arApp.cfg.cameraFar;
 		arApp.camera.mAspectRatio = arApp.cfg.cameraAspectRatio;
         arApp.CreateGraphicsPipeline(arApp.cfg.VertexShaderFileName, arApp.cfg.FragmentShaderFileName);
-        arApp.Run();
+        arApp.Run();*/
         return 0;
-    }
-    else if (arApp.cfg.runMode == "OpenCV") {
+    //}
+    //else 
+    if (cfg.runMode == "OpenCV") {
 		OpenCVManipulations::Run();
         return 0;
 	}

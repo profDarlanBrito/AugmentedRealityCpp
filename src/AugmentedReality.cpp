@@ -16,7 +16,7 @@
 * @see https://www.khronos.org/opengl/wiki/Debug_Output
 * @see https://www.khronos.org/opengl/wiki/Debug_Output#Debug_message_callback
 * @note This function is registered as a callback for OpenGL debug messages using `glDebugMessageCallback`.
-*/
+*
 void GLAPIENTRY OpenGLMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
 {
     std::cerr << "GL CALLBACK: " << (type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "") << " type = " << type << ", severity = " << severity << ", message = " << message << std::endl;
@@ -29,10 +29,14 @@ AugmentedReality::AugmentedReality() {
 	// Constructor implementation
 }
 
+AugmentedReality::~AugmentedReality()
+{
+}
+
 /**
 * @brief Destructor for the AugmentedReality class. 
 * @note It cleans up the SDL resources and destroys the OpenGL context.
-*/
+*
 AugmentedReality::~AugmentedReality() {
 	// Destructor implementation
 	if (glContext) {
@@ -53,7 +57,7 @@ AugmentedReality::~AugmentedReality() {
 * @see https://wiki.libsdl.org/SDL_CreateWindow
 * @see https://glad.dav1d.de
 * @see https://www.youtube.com/watch?v=wg4om77Drr0&list=PLvv0ScY6vfd9zlZkIIqGDeG5TUWswkMox&index=5 youTube video on setting up OpenGL with SDL3 and GLAD
-*/
+*
 bool AugmentedReality::InitializeSDL()
 {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -98,7 +102,7 @@ bool AugmentedReality::InitializeSDL()
 /**
 * @brief Main running loop for class Augmented Reality.
 * @note This function contains the main loop of the application, where it continuously draws the scene and handles events. It needs to kepp running until the user decides to exit application
-*/
+*
 void AugmentedReality::Run() {
 	// Main loop implementation
     while (running) {
@@ -116,7 +120,7 @@ void AugmentedReality::Run() {
 * @note This function queries the OpenGL version, vendor, renderer, and shading language version using `glGetString` and prints them to the console.
 * @see https://www.khronos.org/opengl/wiki/Getting_Started#OpenGL_version
 * @see https://www.khronos.org/opengl/wiki/GLAPI/glGetString
-*/
+*
 void AugmentedReality::GetOpenGLVersionInfo()
 {
     std::cout << "OpenGL Version Information:" << std::endl;
@@ -159,7 +163,7 @@ void AugmentedReality::GetOpenGLVersionInfo()
 * @see https://www.khronos.org/opengl/wiki/Vertex_Attribute
 * @see https://www.youtube.com/watch?v=Ktp1P4J04Gw&list=PLvv0ScY6vfd9zlZkIIqGDeG5TUWswkMox&index=6 youTube video on setting up VBOs, VAOs, and EBOs in OpenGL
 * @note This function assumes that the `object` member variable has been properly initialized with vertex data, colors, normals, and texture coordinates.
-*/
+*
 
 void AugmentedReality::VertexSpecification()
 {
@@ -224,7 +228,7 @@ void AugmentedReality::VertexSpecification()
 * @brief Draws the 3D object using OpenGL.
 * @note This function manipulates events coming from the user, such as keyboard input and mouse movement. It also sets up the OpenGL context, clears the screen, and draws the object using the shader program.
 * @see https://www.khronos.org/opengl/wiki/Rendering
-*/
+*
 void AugmentedReality::HandleEvents()
 {
     SDL_Event event;
@@ -291,10 +295,11 @@ void AugmentedReality::HandleEvents()
 * @note This function loads the vertex and fragment shaders from the specified files, creates a shader program, generates and binds Vertex Array Objects (VAOs) and Vertex Buffer Objects (VBOs), and sets up vertex attributes for positions, colors, normals, and texture coordinates.
 * @see https://www.khronos.org/opengl/wiki/Shader_Compilation
 * @see https://www.youtube.com/watch?v=kpA5X6eI6fM&list=PLvv0ScY6vfd9zlZkIIqGDeG5TUWswkMox&index=4 youTube video on setting up shaders in OpenGL.
-*/ 
+*
 void AugmentedReality::CreateGraphicsPipeline(const std::string vertexShaderFileName,const std::string fragmentShaderFileName,bool debugOn)
 {
-    object.LoadTexture("", window); // Load texture if needed
+    if (!object.IsTextureLoaded())
+        object.LoadTexture(""); // Load texture if needed
 
     // Create the shader program
     graphicsPipelineShaderProgram = shaderOps.CreateShaderProgramFromFiles(vertexShaderFileName, fragmentShaderFileName);
@@ -325,7 +330,7 @@ void AugmentedReality::CreateGraphicsPipeline(const std::string vertexShaderFile
 * @note This function sets up the OpenGL context for drawing by disabling depth testing and face culling, clearing the screen, using the shader program, setting uniforms for model, perspective, and view matrices, and binding the VAO. It also applies transformations such as translation, rotation, and scaling to the model matrix.
 * @see https://www.khronos.org/opengl/wiki/Matrix_Stack
 * @see https://www.khronos.org/opengl/wiki/Uniform
-*/
+*
 void AugmentedReality::PreDraw(glm::mat4& lModelMatrix)
 {
     glDisable(GL_DEPTH_TEST);
@@ -395,7 +400,7 @@ void AugmentedReality::PreDraw(glm::mat4& lModelMatrix)
 * @brief Draws the 3D object using OpenGL.
 * @note This function draws the 3D object using the bound VAO and the shader program. It uses `glDrawArrays` or `glDrawElements` to render the object based on the vertex data and indices.
 * @see https://www.khronos.org/opengl/wiki/Rendering#Drawing
-*/
+*
 void AugmentedReality::Draw()
 {
     // Draw the triangle
@@ -406,3 +411,4 @@ void AugmentedReality::Draw()
     // Swap buffers
     SDL_GL_SwapWindow(window);
 }
+*/

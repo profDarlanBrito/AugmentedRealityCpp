@@ -1,10 +1,9 @@
 #include "Object.hpp"
 #include <SDL3/SDL_surface.h>
 
-GLuint Object::LoadTexture(const std::string& filePath, SDL_Window* window)
+GLuint Object::LoadTexture(const std::string& filePath)
 {
 	// Load texture using stb_image or any other image loading library
-	int width, height, nrChannels;
 	SDL_Surface* surface = nullptr;
 	if (filePath.empty()) {
 		surface = SDL_LoadBMP(textureFilePath.c_str());
@@ -56,7 +55,11 @@ GLuint Object::LoadTexture(const std::string& filePath, SDL_Window* window)
 		glGenerateMipmap(GL_TEXTURE_2D);
 		// Set texture parameters
 		glActiveTexture(GL_TEXTURE0);
-
+		GLint multiTextureUnit;
+		glGetIntegerv(GL_ACTIVE_TEXTURE, &multiTextureUnit);
+		if (multiTextureUnit != GL_TEXTURE0) {
+			std::cerr << "Warning: Active texture unit is not GL_TEXTURE0." << std::endl;
+		}
 	} else {
 		std::cerr << "Failed to load texture or texture not found: " << filePath << std::endl;
 		std::cerr << "SDL Error: " << SDL_GetError() << std::endl;
@@ -142,8 +145,11 @@ bool Object::LoadFromOBJ(const std::string& filePath)
 		std::cerr << "No texture file specified in the OBJ file. Loading default color." << std::endl;
 		// If no texture is specified, you can set a default color or handle it accordingly
 		verticesColors.resize(verticesSize, 1.0f); // Default color white
-		return false;
 	}
-	textureLoaded = true; // Set the texture loaded flag to true
+	else {
+		LoadTexture(textureFilePath);
+		textureLoaded = true; // Set the texture loaded flag to true
+
+	}
 	return true;
 }
