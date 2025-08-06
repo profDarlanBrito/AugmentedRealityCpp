@@ -5,11 +5,13 @@
 - [ ] Adicionar testes unitários para as principais classes (Object, OpenGLManipulations).
 - [ ] Refatorar o gerenciamento de recursos OpenGL (VAO, VBO, EBO) para evitar vazamentos.
 - [ ] Documentar todas as funções públicas nas classes principais.
+- [ ] <span style="color:red">Arrumar o código que não está rotacionando o cubo na direção zx.</span>
+- [ ] Adicionar suporte a diferentes formatos de arquivo de modelo 3D (FBX, GLTF).
 
 ## Funcionalidades
 - [ ] Permitir carregamento de múltiplos modelos OBJ simultaneamente.
 - [ ] Adicionar suporte a diferentes tipos de shaders (geometry, tessellation).
-- [ ] Implementar sistema de configuração via arquivo externo.
+- [x] Implementar sistema de configuração via arquivo externo.
 
 ## Interface
 - [ ] Criar interface gráfica para seleção de modelos e shaders.
