@@ -9,7 +9,7 @@
 - [ ] Adicionar suporte a diferentes formatos de arquivo de modelo 3D (FBX, GLTF).
 
 ## Funcionalidades
-- [ ] Permitir carregamento de múltiplos modelos OBJ simultaneamente.
+- [x] Permitir carregamento de múltiplos modelos OBJ simultaneamente.
 - [ ] Adicionar suporte a diferentes tipos de shaders (geometry, tessellation).
 - [x] Implementar sistema de configuração via arquivo externo.
 
