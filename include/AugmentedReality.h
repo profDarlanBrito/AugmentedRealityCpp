@@ -1,5 +1,5 @@
 #pragma once
-#include <iostream>
+/*#include <iostream>
 #include <glad/glad.h>
 #include <SDL3/SDL.h>
 #include <glm/glm.hpp>
@@ -14,22 +14,22 @@
 #include <SDL3_image/SDL_image.h> // Uncomment if you need to load images/textures
 #include "ConfigManager.h" // Include your configuration manager header
 // Defina aqui as declarações necessárias para o seu aplicativo de Realidade Aumentada.
-
+*/
 using namespace std;
 
 
 class AugmentedReality
 {
 public:
-    ShaderOperations shaderOps; // Assuming you have a ShaderOperations class for shader management
+    /*ShaderOperations shaderOps; // Assuming you have a ShaderOperations class for shader management
     Camera camera; // Assuming you have a Camera class for camera operations
 	Object object; // Assuming you have an Object class for 3D objects
     ConfigManager cfg;
-
+    */
     AugmentedReality();
 
     ~AugmentedReality();
-
+    /*
     void Run();
 
     void GetOpenGLVersionInfo();
@@ -53,9 +53,9 @@ public:
     void CreateGraphicsPipeline(const std::string vertexShaderFileName, const std::string fragmentShaderFileName, bool debugOn = true);
     void PreDraw(glm::mat4& modelMatrix);
     void Draw();
-
+    */
 private:
-    SDL_Window* window = nullptr;
+    /*SDL_Window* window = nullptr;
     SDL_GLContext glContext = nullptr;
     int windowWidth = 800;
     int windowHeight = 600;
@@ -72,4 +72,5 @@ private:
     float rotationAngle = 0.0f; // Rotation angle, if needed
     float scaleFactor = 1.0f; // Scale factor, if needed
     glm::mat4 modelMatrix = glm::mat4(1.0f); // Model matrix for transformations
+    */
 };
