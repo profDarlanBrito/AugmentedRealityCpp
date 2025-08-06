@@ -16,7 +16,7 @@ As principais funcionalidades incluem:
 
 ## Pré-requisitos
 
-[cite\_start]O projeto utiliza o `vcpkg` como gerenciador de pacotes para gerenciar as dependências[cite: 3]. As dependências do projeto são:
+O projeto utiliza o `vcpkg` como gerenciador de pacotes para gerenciar as dependências[cite: 3]. As dependências do projeto são:
 
   * `glm` 
   * `sdl3` 
@@ -83,11 +83,12 @@ cmake --build out/build/x64-debug
 
 ### 4\. Executar
 
-O executável será gerado no diretório de build[cite: 4]. O arquivo principal é `AugmentedReality`.
+## Antes de executar certifique-se qual é a versão do OpenGL instalada no seu sistema, pois o projeto foi desenvolvido com OpenGL 4.10 ou superior.
+O executável será gerado no diretório de build. O arquivo principal é `AugmentedReality`.
 
 ```sh
 # Exemplo de execução (caminho pode variar)
 ./out/build/x64-debug/AugmentedReality.exe
 ```
 
-[cite\_start]A aplicação irá carregar as configurações do arquivo `config.yaml` e executar no modo especificado[cite: 1].
+A aplicação irá carregar as configurações do arquivo `config.yaml` e executar no modo especificado[cite: 1].
