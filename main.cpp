@@ -1,7 +1,7 @@
 #include <iostream>
 #include "AugmentedReality.h"
 #include "ConfigManager.h"
-#include "OpenCVManipulations.hpp"
+//#include "OpenCVManipulations.hpp"
 #include "OpenGLManipulations.hpp"
 
 using namespace std;
@@ -67,15 +67,15 @@ int main()
 		arApp.camera.mFar = arApp.cfg.cameraFar;
 		arApp.camera.mAspectRatio = arApp.cfg.cameraAspectRatio;
         arApp.CreateGraphicsPipeline(arApp.cfg.VertexShaderFileName, arApp.cfg.FragmentShaderFileName);
-        arApp.Run();*/
-        return 0;
+        arApp.Run();
+        return 0;*/
     //}
     //else 
-    if (cfg.runMode == "OpenCV") {
+    /*if (cfg.runMode == "OpenCV") {
 		OpenCVManipulations::Run();
         return 0;
-	}
-    else if (cfg.runMode == "OpenGL") {
+	}*/
+    if (cfg.runMode == "OpenGL") {
 		OpenGLManipulations::Run();
     }
 	else {  

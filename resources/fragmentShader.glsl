@@ -1,4 +1,4 @@
-#version 460 core
+#version 410 core
 
 in vec3 v_vertexColor; // Input vertex color	
 in vec2 v_TexCoord; // Input texture coordinates

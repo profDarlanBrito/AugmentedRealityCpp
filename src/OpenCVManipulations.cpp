@@ -44,15 +44,5 @@ void OpenCVManipulations::cameraMatrixManipulations()
 }
 
 void OpenCVManipulations::Run() {
-	AugmentedReality ar;
-	ShaderOperations shaderOps;
-	ConfigManager configManager(CONFIG_FILE_PATH_NAME);
-	std::cout << "Running OpenCV Manipulations..." << std::endl;
-	ar.InitializeSDL();
-	GLuint graphicsPipelineShaderProgram = shaderOps.CreateShaderProgramFromFiles(configManager.VertexShaderFileName, configManager.FragmentShaderFileName);
-	if (graphicsPipelineShaderProgram == 0) {
-		std::cerr << "Failed to create shader program." << std::endl;
-		return;
-	}
 	std::cout << "OpenCV Manipulations completed." << std::endl;
 }
