@@ -13,6 +13,10 @@ class OpenCVManipulations {
 public:
 	static void MainTests();
 	static void cameraMatrixManipulations();
-	static void Run();
+	static void Run(std::string option);
+	void SaveVideoFrames(const std::string& videoPath, const std::string& outputDir);
+	void SaveVideoFrames(const std::string& videoPath, const std::string& outputDir, const double desiredFps);
+	static double GetVideoFrameRate(const std::string& videoPath);
+	static double GetVideoFrameRate(const cv::VideoCapture& cap);
 };
 #endif // OPENCVMANIPULATIONS_HPP

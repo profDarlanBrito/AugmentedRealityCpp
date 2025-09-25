@@ -42,6 +42,8 @@ public:
 	{
 		// Constructor implementation
 		running = false; // Initialize running state
+		windowWidth = cfg.windowWidth; // Set window width from config
+		windowHeight = cfg.windowHeight; // Set window height from config
 	}
 	~OpenGLManipulations();
 	static void Run();
@@ -67,8 +69,8 @@ private:
 	void CreateGraphicsPipeline(const std::string& vertexShaderFileName, const std::string& fragmentShaderFileName, bool debugOn = true);
 	SDL_Window* window = nullptr; // SDL window
 	SDL_GLContext glContext = nullptr; // OpenGL context
-	int windowWidth = 800; // Default window width
-	int windowHeight = 600; // Default window height
+	int windowWidth; // Default window width
+	int windowHeight; // Default window height
 	// Other private members for OpenGL manipulations can be added here
 	GLuint graphicsPipelineShaderProgram = 0; // Shader program ID
 	/*

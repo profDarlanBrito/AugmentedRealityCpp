@@ -29,7 +29,9 @@ add_executable (AugmentedReality
                 "src/GLMath.cpp" 
                 "src/glad.c"
                 "src/ConfigManager.cpp" 
-                "src/OpenGLManipulations.cpp")
+                "src/OpenGLManipulations.cpp"
+                "src/OpenCVManipulations.cpp"
+                "src/Colmap.cpp")
 
 
 if (CMAKE_VERSION VERSION_GREATER 3.13)

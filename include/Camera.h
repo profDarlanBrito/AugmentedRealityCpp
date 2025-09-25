@@ -1,7 +1,9 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "GLMath.h"
+#include <glm/gtc/matrix_transform.hpp>
+#include <algorithm> // Para std::clamp
+#include <iostream>
 
 class Camera
 {
@@ -16,6 +18,8 @@ private:
 	glm::vec3 mFront = glm::vec3(0.0f, 0.0f, -1.0f); // Adicionado para uso em processMouseMovement
 	glm::vec3 mRight = glm::vec3(1.0f, 0.0f, 0.0f);  // Opcional, usado em processMouseMovement
 	glm::vec3 mWorldUp = glm::vec3(0.0f, 1.0f, 0.0f); // Opcional, usado em processMouseMovement
+	float sensitivity = 0.1f; // Sensibilidade do mouse
+	float mRadius = 10.0f; // Raio da câmera, usado para calcular a posição da câmera em torno do objeto
 
 
 public:
@@ -34,13 +38,15 @@ public:
 	{
 		// The second parameter of glm::lookAt should be the point the camera is looking at (target), not the direction.
 		// So we need to add the view direction to the camera position.
-		return glm::lookAt(mEye, mEye + mViewDirection, mUpDirection);
+		//return glm::lookAt(mEye, mViewDirection, mUpDirection);
+		//return glm::lookAt(mEye, mEye + mFront, mUpDirection);
+		return glm::lookAt(mEye, glm::vec3(0.0f), mUpDirection);
 	}
 
 	/**
 	* @brief Default constructor for the Camera class.
 	*/
-	Camera() : mEye(0.0f, 0.0f, 0.0f), mViewDirection(0.0f, 0.0f, -1.0f), mUpDirection(0.0f, 1.0f, 0.0f) {}
+	Camera() : mEye(0.0f, 0.0f, 0.0f), mViewDirection(0.0f, 0.0f, 1.0f), mUpDirection(0.0f, 1.0f, 0.0f), mRadius(2.0f) {}
 
 	/**
 	* @brief Constructor for the Camera class with specified parameters.
@@ -70,9 +76,6 @@ public:
 	void setUpDirection(const glm::vec3& upDirection) {
 		mUpDirection = glm::normalize(upDirection);
 	}
-    glm::mat4 getViewMatrix(){
-        return glm::lookAt(mEye, mViewDirection, mUpDirection);
-	}
 
 	void MoveForward(float distance)
 	{
@@ -93,5 +96,29 @@ public:
 		mEye += right * distance;
 	}
 	void processMouseMovement(float xoffset, float yoffset);
+	void updateDirectionFromAngles(float yaw, float pitch, float roll);
+	// Sobrecarga do operador de atribuição
+    Camera& operator=(const Camera& other) {
+        if (this != &other) {
+            mEye = other.mEye;
+            mViewDirection = other.mViewDirection;
+            mUpDirection = other.mUpDirection;
+            mYaw = other.mYaw;
+            mPitch = other.mPitch;
+            mRoll = other.mRoll;
+            mFront = other.mFront;
+            mRight = other.mRight;
+            mWorldUp = other.mWorldUp;
+            mFov = other.mFov;
+            mNear = other.mNear;
+            mFar = other.mFar;
+            mAspectRatio = other.mAspectRatio;
+        }
+        return *this;
+    }
+
+    void setSensitivity(float newSensitivity) {
+		sensitivity = newSensitivity;
+	}
 };
 #endif // !CAMERA_HPP

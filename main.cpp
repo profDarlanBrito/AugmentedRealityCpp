@@ -1,8 +1,9 @@
 #include <iostream>
 #include "AugmentedReality.h"
 #include "ConfigManager.h"
-//#include "OpenCVManipulations.hpp"
+#include "OpenCVManipulations.hpp"
 #include "OpenGLManipulations.hpp"
+#include <Colmap.hpp>
 
 using namespace std;
 /**
@@ -22,7 +23,7 @@ int main()
 	//arApp.cfg = cfg; // Load configuration from YAML file
 	//std::cout << arApp.cfg.runMode << std::endl;
     //if (arApp.cfg.runMode == "AugmentedReality") {
-        cout << "Initializing OpenGL ..." << endl;
+        //cout << "Initializing OpenGL ..." << endl;
         /*
         // Initialize SDL and OpenGL context
         if (!arApp.InitializeSDL()) {
@@ -71,13 +72,22 @@ int main()
         return 0;*/
     //}
     //else 
-    /*if (cfg.runMode == "OpenCV") {
-		OpenCVManipulations::Run();
+    if (cfg.runMode == "OpenCV") {
+		OpenCVManipulations::Run(cfg.opencvMode);
         return 0;
-	}*/
+	}
     if (cfg.runMode == "OpenGL") {
 		OpenGLManipulations::Run();
     }
+    if (cfg.runMode == "COLMAP") {
+        Colmap colmap;
+        if(cfg.opencvMode == "framing") {
+            OpenCVManipulations opcvm;
+            opcvm.SaveVideoFrames(cfg.getString("video_path"), cfg.getString("video_frames_output_path"), cfg.getInt("frame_rate"));
+		}
+        colmap.RunCommandLine(cfg);
+        return 0;
+	}
 	else {  
         std::cerr << "Invalid mode specified in config file. Expected 'OpenGL'." << std::endl;
         return -1;

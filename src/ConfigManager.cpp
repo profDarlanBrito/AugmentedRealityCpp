@@ -11,6 +11,7 @@ ConfigManager::ConfigManager() {
     windowWidth = 800;
     windowHeight = 600;
     runMode = "OpenGL";
+	opencvMode = "framing";
     VertexShaderFileName = "../../../shaders/vertex_shader.glsl";
     FragmentShaderFileName = "../../../shaders/fragment_shader.glsl";
     cameraPosition = glm::vec3(0.0f, 0.0f, 5.0f);
@@ -73,6 +74,13 @@ bool ConfigManager::Load() {
         std::cerr << "Key 'run_mode' not found in the configuration file." << std::endl;
         success = false;
     }
+    if (HasKey("opencv_mode")) {
+        opencvMode = Get<std::string>("opencv_mode");
+        std::cout << "OpenCV Mode: " << opencvMode << std::endl;
+    } else {
+        std::cerr << "Key 'opencv_mode' not found in the configuration file." << std::endl;
+        success = false;
+	}
     if (HasKey("vertex_Shader_file")) {
         VertexShaderFileName = Get<std::string>("vertex_Shader_file");
         std::cout << "Arquivo do shader de vértices: " << VertexShaderFileName << std::endl;
@@ -216,6 +224,48 @@ bool ConfigManager::Load() {
 }
 
 /**
+* @brief Retrieves a string value from the configuration.
+* @param key The key associated with the desired string value.
+* @return The string value associated with the key.
+* @throws std::runtime_error if the key does not exist.
+*/
+std::string ConfigManager::getString(const std::string& key) const {
+    if (HasKey(key)) {
+        return Get<std::string>(key);
+    } else {
+        throw std::runtime_error("Key '" + key + "' not found in the configuration file.");
+    }
+}
+
+/**
+* @brief Retrieves an integer value from the configuration.
+* @param key The key associated with the desired integer value.
+* @return The integer value associated with the key.
+* @throws std::runtime_error if the key does not exist.
+*/
+int ConfigManager::getInt(const std::string& key) const {
+    if (HasKey(key)) {
+        return Get<int>(key);
+    } else {
+        throw std::runtime_error("Key '" + key + "' not found in the configuration file.");
+    }
+}
+
+/**
+* @brief Retrieves a boolean value from the configuration.
+* @param key The key associated with the desired boolean value.
+* @return The boolean value associated with the key.
+* @throws std::runtime_error if the key does not exist.
+*/
+bool ConfigManager::getBool(const std::string& key) const {
+    if (HasKey(key)) {
+        return Get<bool>(key);
+    } else {
+        throw std::runtime_error("Key '" + key + "' not found in the configuration file.");
+    }
+}
+
+/**
 * @brief Assignment operator for ConfigManager.
 * @param other The ConfigManager object to copy from.
 * @return A reference to the current ConfigManager object.
@@ -239,6 +289,7 @@ ConfigManager& ConfigManager::operator=(const ConfigManager& other)
 		mouseSensitivity = other.mouseSensitivity;
         cameraViewDirection = other.cameraViewDirection;
 	    cameraUpDirection = other.cameraUpDirection;
+		opencvMode = other.opencvMode;
     }
     return *this;
 }

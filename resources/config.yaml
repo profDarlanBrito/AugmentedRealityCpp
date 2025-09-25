@@ -3,11 +3,18 @@
 
 #General settings
 # Run mode can be 'OpenCV', 'OpenGL' or 'AugmentedReality'
-run_mode: OpenGL
+run_mode: COLMAP
+opencv_mode: TESTING
+frame_rate: 6 # Frame rate for video processing. Must be between 1 and 30.
+
+# Path to the input image or video file
+video_path: ../../../Teste_Colmap/Imagens_Clio/Clio2.mp4
+# Path to the output file or directory
+video_frames_output_path: ../../../Teste_Colmap/Imagens_Clio
 
 # OpenGL settings
-window_width: 800
-window_height: 600
+window_width: 1820
+window_height: 980
 fullscreen: false
 vertex_Shader_file: ../../../resources/vertexShader.glsl
 fragment_Shader_file: ../../../resources/fragmentShader.glsl
@@ -15,11 +22,71 @@ mouse_sensitivity: 1.0
 
 #Camera settings
 camera_position: [0.0, 0.0, 5.0]
-camera_view_direction: [0.0, 0.0, -1.0]
+camera_view_direction: [90.0, 180.0, 0.0]
 camera_up_direction: [0.0, 1.0, 0.0]
 camera_fov: 45.0
 camera_aspect_ratio: -1
 camera_near_plane: 0.1
 camera_far_plane: 10.0
 background_color: [0.2, 0.2, 0.2]
-mouse_move_enabled: true
+mouse_move_enabled: false
+
+# COLMAP settings
+colmap_executable_path: /usr/local/bin/colmap
+colmap_database_path: ../../../Teste_Colmap/database.db
+colmap_image_path: ../../../Teste_Colmap/Imagens_Clio
+colmap_model_path: ../../../Teste_Colmap/sparse/0
+colmap_workspace_path: ../../../Teste_Colmap/WS
+colmap_output_path: ../../../Teste_Colmap/output
+# Output types can be 'COLMAP', 'PMVS', 'CMP-MVS'
+colmap_output_type: COLMAP
+colmap_num_threads: 4
+colmap_min_num_matches: 50
+colmap_max_num_matches: 10000
+colmap_max_reproj_error: 4.0
+colmap_max_image_size: 2000
+colmap_focal_length_factor: 1.2
+colmap_use_gpu: true
+colmap_dense_min_num_pixels: 100
+colmap_dense_num_images: 50
+colmap_dense_quality: medium
+colmap_dense_filter: aggressive
+colmap_meshing_max_faces: 1000000
+colmap_meshing_poisson_depth: 8
+colmap_meshing_poisson_scale: 1.1
+colmap_meshing_poisson_samples: 1.5
+colmap_meshing_poisson_solver_divide: 8
+colmap_meshing_poisson_point_weight: 4
+colmap_meshing_poisson_trim: 10
+colmap_meshing_delaunay_alpha: 5.0
+colmap_meshing_delaunay_max_proj_dist: 10.0
+colmap_meshing_delaunay_max_depth: 8
+colmap_meshing_delaunay_min_num_faces: 100
+colmap_meshing_delaunay_num_neighbors: 6
+colmap_meshing_delaunay_num_threads: 4
+colmap_texturing_blend: 5
+colmap_texturing_fill_holes: true
+colmap_texturing_skip_unseen_faces: true
+colmap_texturing_max_views: 5
+colmap_texturing_size: 4096
+colmap_texturing_outlier_removal: true
+colmap_texturing_outlier_removal_min_triangles: 10
+colmap_texturing_outlier_removal_max_reproj_error: 4.0
+colmap_texturing_num_threads: 4
+colmap_fusion_min_num_pixels: 3
+colmap_fusion_max_reproj_error: 4.0
+colmap_fusion_surface_type: poisson
+colmap_fusion_num_threads: 4
+colmap_cleanup_num_images: 10
+colmap_cleanup_num_points: 1000
+colmap_cleanup_num_threads: 4
+colmap_cleanup_remove_outliers: true
+colmap_cleanup_outlier_radius: 0.05
+colmap_cleanup_outlier_min_neighbors: 5
+colmap_cleanup_outlier_num_threads: 4
+colmap_cleanup_remove_isolated: true
+colmap_workspace_format: COLMAP
+colmap_geometry_format: PLY
+colmap_geometry_consistency_check: true
+# Input types can be 'geometric' or 'photometric'
+colmap_input_type: geometric

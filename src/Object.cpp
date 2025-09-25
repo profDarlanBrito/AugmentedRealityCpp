@@ -131,11 +131,31 @@ Object Object::LoadFromOBJ(const std::string& filePath)
 	obj.vertices.clear();
 	obj.verticesTextureCoords.clear();
 	obj.indices.clear();
-
+	std::vector<float> verticesIdx;
+	std::vector<glm::u32vec3> triangleIdx;
+	std::vector<glm::vec3> vertices1PerShape;
+	std::vector<glm::vec3> vertices2PerShape;
+	std::vector<glm::vec3> vertices3PerShape;
 	for (const auto& shape : shapes) {
+		int cont = 0;
+		std::cout << "Vertices = [";
 		for (const auto& idx : shape.mesh.indices) {
 			// Indexes of the vertices
 			obj.indices.push_back(idx.vertex_index);
+			verticesIdx.push_back(idx.vertex_index);
+			cont++;
+			if (cont % 3 == 0) {
+				// Every three indices, we have a triangle
+				//std::cout << "Triangle: " << verticesIdx[0] << ", " << verticesIdx[1] << ", " << verticesIdx[2] << std::endl;
+				triangleIdx.push_back(glm::vec3(verticesIdx[0], verticesIdx[1], verticesIdx[2]));
+				vertices1PerShape.push_back(glm::vec3(attrib.vertices[3 * verticesIdx[0]], attrib.vertices[3 * verticesIdx[0] + 1], attrib.vertices[3 * verticesIdx[0] + 2]));
+				vertices2PerShape.push_back(glm::vec3(attrib.vertices[3 * verticesIdx[1]], attrib.vertices[3 * verticesIdx[1] + 1], attrib.vertices[3 * verticesIdx[1] + 2]));
+				vertices3PerShape.push_back(glm::vec3(attrib.vertices[3 * verticesIdx[2]], attrib.vertices[3 * verticesIdx[2] + 1], attrib.vertices[3 * verticesIdx[2] + 2]));
+				std::cout << vertices1PerShape.back().x << ", " << vertices1PerShape.back().y << ", " << vertices1PerShape.back().z << ";";
+				std::cout << vertices2PerShape.back().x << ", " << vertices2PerShape.back().y << ", " << vertices2PerShape.back().z << ";";
+				std::cout << vertices3PerShape.back().x << ", " << vertices3PerShape.back().y << ", " << vertices3PerShape.back().z << ";";
+				verticesIdx.clear();
+			}
 		}
 	}
 	obj.vertices = attrib.GetVertices();

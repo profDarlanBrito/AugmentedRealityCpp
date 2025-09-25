@@ -15,18 +15,10 @@ public:
 		// Constructor implementation
 		verticesSize = 0; // Initialize vertices size
 		textureID = 0; // Initialize texture ID
+		elementCount = 0; // Initialize element count
 	}
 	~Object() {
 		// Destructor implementation
-	}
-	void Initialize() {
-		// Initialization code
-	}
-	void Render() {
-		// Rendering code
-	}
-	void Update() {
-		// Update logic
 	}
 	std::vector<GLfloat> GetVertices() const {
 		return vertices;
@@ -48,12 +40,14 @@ public:
 			return; // Handle error appropriately
 		}
 		indices = newIndices;
+		elementCount = newIndices.size();
 	}
 	void SetVertexSpecification(const std::vector<GLfloat>& newVertices, const std::vector<GLfloat>& newColors, const std::vector<GLuint>& newIndices) {
 		SetVertices(newVertices);
 		SetVerticesColors(newColors);
 		SetIndices(newIndices);
 		verticesSize = newVertices.size(); // Update vertices size
+		elementCount = newIndices.size(); // Update element count
 	}
 	std::vector<GLfloat> GetVerticesColors() const {
 		return verticesColors;
@@ -101,8 +95,13 @@ public:
 			textureFilePath = other.textureFilePath;
 			textureLoaded = other.textureLoaded;
 			modelMatrix = other.modelMatrix;
+			elementCount = other.elementCount;
 		}
 		return *this;
+	}
+	int GetElementCount() {
+		elementCount = indices.size(); // Ensure elementCount is updated
+		return elementCount;
 	}
 	GLuint vao = 0; // Vertex Array Object ID
 	GLuint vbo = 0; // Vertex Buffer Object ID
@@ -123,6 +122,7 @@ private:
 	std::string textureFilePath; // File path for the object file
 	bool textureLoaded = false; // Flag to check if texture is loaded
 	glm::mat4 modelMatrix; // Model matrix for transformations
+	int elementCount; // Number of elements (indices)	
 };
 
 #endif // OBJECT_HPP

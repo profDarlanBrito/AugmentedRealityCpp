@@ -109,11 +109,11 @@ void OpenGLManipulations::HandleEvents()
                 //std::cout << "Ângulo de rotação aumentado: " << rotationAngle << std::endl;
             }
             else if (key == SDLK_PLUS || key == SDLK_KP_PLUS) {
-                scaleFactor = glm::vec3(0.1, 0.1f, 0.1f); // Increase the scale factor
+                scaleFactor = glm::vec3(1.1, 1.1f, 1.1f); // Increase the scale factor
                 //std::cout << "Fator de escala aumentado: " << scaleFactor << std::endl;
             }
             else if (key == SDLK_MINUS || key == SDLK_KP_MINUS) {
-                scaleFactor = glm::vec3(-0.1, -0.1f, -0.1f); // Decrease the scale factor
+                scaleFactor = glm::vec3(0.9, 0.9f, 0.9f); // Decrease the scale factor
                 //std::cout << "Fator de escala diminuído: " << scaleFactor << std::endl;
             }
         }
@@ -132,6 +132,17 @@ void OpenGLManipulations::HandleEvents()
 
             //std::cout << "Mouse movimento: deltaX=" << deltaX << " deltaY=" << deltaY << std::endl;
         }
+        else if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
+            if (event.button.button == SDL_BUTTON_LEFT) {
+                // Handle left mouse button click
+				cfg.mouseMoveEnabled = true; // Toggle mouse movement
+                std::cout << "Left mouse button clicked." << std::endl;
+            }
+		}
+        else if (event.type == SDL_EVENT_MOUSE_BUTTON_UP) 
+            if (event.button.button == SDL_BUTTON_LEFT) 
+				// Handle left mouse button release
+				cfg.mouseMoveEnabled = false; // Disable mouse movement
     }
 }
 
@@ -261,9 +272,18 @@ bool OpenGLManipulations::VertexGPUAlocation()
             GL_STATIC_DRAW);
         glEnableVertexAttribArray(3);
         glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
         glGenBuffers(1, &object.ebo);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, object.ebo);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, object.GetIndices().size() * sizeof(GLuint), object.GetIndices().data(), GL_STATIC_DRAW);
+		/*std::vector<GLuint> idx = object.GetIndices();
+		std::vector<GLuint> indices; // Copy indices to a local variable
+        for (int i = 0; i < indices.size(); i += 3) {
+            indices.push_back(idx[i]);
+            indices.push_back(idx[i + 1]);
+            indices.push_back(idx[i + 2]);
+		}
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);*/
     }
 
 	// Unbind the VBO and EBO
@@ -304,14 +324,11 @@ void OpenGLManipulations::PreDraw()
     glClearColor(cfg.backgroundColor.r, cfg.backgroundColor.g, cfg.backgroundColor.b, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-    for (Object object : objects) {
+    for (auto& object : objects) {
         // Use the shader program
         glUseProgram(graphicsPipelineShaderProgram);
 
         glm::mat4 perspective = glm::perspective(glm::radians(camera.mFov), camera.mAspectRatio, camera.mNear, camera.mFar);
-        rotationAngle = 0.0f; // Reset rotation angle after applying it
-        scaleFactor = glm::vec3(1.0f); // Reset scale factor after applying it
-        modelTranslation = glm::vec3(0.0f); // Reset model translation after applying it
 
         // Set the uniform for the model matrix
         // Note: Ensure that the shader program has the uniform variables defined
@@ -328,6 +345,11 @@ void OpenGLManipulations::PreDraw()
                 modelTranslation),
             glm::radians(rotationAngle), glm::vec3(0.0f, 1.0f, 0.0f)),
             scaleFactor));
+		//object.SetModelMatrix(glm::mat4(1.0f)); // Reset model matrix to identity
+        rotationAngle = 0.0f; // Reset rotation angle after applying it
+        scaleFactor = glm::vec3(1.0f); // Reset scale factor after applying it
+        modelTranslation = glm::vec3(0.0f); // Reset model translation after applying it
+
         if (uModelMatrixLocation != -1) {
             glUniformMatrix4fv(uModelMatrixLocation, 1, GL_FALSE, glm::value_ptr(object.GetModelMatrix()));
         }
@@ -365,7 +387,7 @@ void OpenGLManipulations::PreDraw()
         // Bind the VAO
         glBindVertexArray(object.vao);
 
-        glDrawElements(GL_TRIANGLES, object.GetVerticesSize(), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, object.GetElementCount(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
     }
 }
@@ -424,8 +446,9 @@ void OpenGLManipulations::Run()
     
 	// Load the 3D object from the specified file
 	app.objects.push_back(Object::LoadFromOBJ("../../../models/Cubo.obj"));
-	app.objects.push_back(Object::LoadFromOBJ("../../../models/Cubo2.obj"));
+	//app.objects.push_back(Object::LoadFromOBJ("../../../models/Cubo2.obj"));
     if(!app.VertexGPUAlocation()) {
+
         std::cerr << "Failed to allocate GPU resources for vertices." << std::endl;
         std::exit(EXIT_FAILURE);
 	}
@@ -433,7 +456,11 @@ void OpenGLManipulations::Run()
         glEnable(GL_DEBUG_OUTPUT);
         glDebugMessageCallback(MessageCallback, nullptr);
 	}
-	app.camera = Camera(app.cfg.cameraPosition, app.cfg.cameraViewDirection, app.cfg.cameraUpDirection);
+    app.camera.setPosition(app.cfg.cameraPosition);
+    //app.camera.setViewDirection(app.cfg.cameraViewDirection);
+    //app.camera.setUpDirection(app.cfg.cameraUpDirection);
+	app.camera.updateDirectionFromAngles(app.cfg.cameraViewDirection.x, app.cfg.cameraViewDirection.y, app.cfg.cameraViewDirection.z); // Set camera position
+	app.camera.setSensitivity(app.cfg.mouseSensitivity);
 	// Start the main loop
 
 	app.MainLoop();

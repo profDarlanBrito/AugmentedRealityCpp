@@ -43,6 +43,111 @@ void OpenCVManipulations::cameraMatrixManipulations()
 	std::cout << "x: " << glm::to_string(x) << std::endl;
 }
 
-void OpenCVManipulations::Run() {
-	std::cout << "OpenCV Manipulations completed." << std::endl;
+void OpenCVManipulations::Run(std::string option) {
+	OpenCVManipulations opcvm;
+	std::cout << "\n\n\n\n" << std::endl;
+	std::cout << "******************************************************************" << std::endl;
+	std::cout << "OpenCV Manipulations." << std::endl;
+	std::cout << "******************************************************************" << std::endl;
+	std::cout << "\n\n\n\n" << std::endl;
+	if (strcmp(option.c_str(), "test") == 0) {
+		opcvm.MainTests();
+	}
+	else if (strcmp(option.c_str(), "framing") == 0) {
+		opcvm.SaveVideoFrames("C:/Users/dnune/OneDrive/Documentos/Visual Studio 2022/Projects/AugmentedReality/Teste_Colmap/Imagens_Clio/Clio.mp4",
+			"C:/Users/dnune/OneDrive/Documentos/Visual Studio 2022/Projects/AugmentedReality/Teste_Colmap/Imagens_Clio");
+	}
+	else {
+		std::cerr << "Invalid option. Use 'test' or 'framing'." << std::endl;
+	}
+}
+
+void OpenCVManipulations::SaveVideoFrames(const std::string& videoPath, const std::string& outputDir) {
+	std::cout << "************************************************" << std::endl;
+	std::cout << " Starting framing the video " << std::endl;
+	std::cout << "************************************************" << std::endl;
+    cv::VideoCapture cap(videoPath);
+	double fps = GetVideoFrameRate(cap);
+    if (!cap.isOpened()) {
+        std::cerr << "Not possible to open the video file: " << videoPath << std::endl;
+        return;
+    }
+
+    // Extrai o nome base do arquivo de vídeo (sem caminho e extensão)
+    size_t lastSlash = videoPath.find_last_of("/\\");
+    std::string filename = (lastSlash == std::string::npos) ? videoPath : videoPath.substr(lastSlash + 1);
+    size_t lastDot = filename.find_last_of('.');
+    std::string baseName = (lastDot == std::string::npos) ? filename : filename.substr(0, lastDot);
+
+    int frameNumber = 1;
+	int contFrame = 0;
+    cv::Mat frame;
+    while (cap.read(frame)) {
+		if (contFrame % 2 == 0) { // Salva apenas a cada 10 quadros
+			char buffer[256];
+			snprintf(buffer, sizeof(buffer), "%s/%s_%03d.png", outputDir.c_str(), baseName.c_str(), frameNumber);
+			cv::imwrite(buffer, frame);
+			frameNumber++;
+			std::cout << "*";
+		}
+		contFrame++;
+    }
+	std::cout << "************************************************" << std::endl;
+	std::cout << " Frames save in: " << outputDir << std::endl;
+	std::cout << " Ending framing the video " << std::endl;
+	std::cout << "************************************************" << std::endl;
+}
+
+void OpenCVManipulations::SaveVideoFrames(const std::string& videoPath, const std::string& outputDir, const double desiredFps) {
+	std::cout << "************************************************" << std::endl;
+	std::cout << " Starting framing the video " << std::endl;
+	std::cout << "************************************************" << std::endl;
+	cv::VideoCapture cap(videoPath);
+	double fps = GetVideoFrameRate(cap);
+	if (!cap.isOpened()) {
+		std::cerr << "Not possible to open the video file: " << videoPath << std::endl;
+		return;
+	}
+
+	// Extrai o nome base do arquivo de vídeo (sem caminho e extensão)
+	size_t lastSlash = videoPath.find_last_of("/\\");
+	std::string filename = (lastSlash == std::string::npos) ? videoPath : videoPath.substr(lastSlash + 1);
+	size_t lastDot = filename.find_last_of('.');
+	std::string baseName = (lastDot == std::string::npos) ? filename : filename.substr(0, lastDot);
+
+	int frameNumber = 1;
+	int contFrame = 0;
+	cv::Mat frame;
+	int rate = static_cast<int>(fps / desiredFps);
+	while (cap.read(frame)) {
+		if (contFrame % rate == 0) { // Salva apenas a cada 10 quadros
+			char buffer[256];
+			snprintf(buffer, sizeof(buffer), "%s/%s_%03d.png", outputDir.c_str(), baseName.c_str(), frameNumber);
+			cv::imwrite(buffer, frame);
+			frameNumber++;
+			std::cout << "*";
+		}
+		contFrame++;
+	}
+	std::cout << "************************************************" << std::endl;
+	std::cout << " Frames save in: " << outputDir << std::endl;
+	std::cout << " Ending framing the video " << std::endl;
+	std::cout << "************************************************" << std::endl;
+}
+
+double OpenCVManipulations::GetVideoFrameRate(const std::string& videoPath) {
+    cv::VideoCapture cap(videoPath);
+    if (!cap.isOpened()) {
+        std::cerr << "It's not possible to opend the video in file: " << videoPath << std::endl;
+        return 0.0;
+    }
+    // CV_CAP_PROP_FPS ou cv::CAP_PROP_FPS retorna a taxa de quadros
+    double fps = cap.get(cv::CAP_PROP_FPS);
+    return fps;
+}
+
+double OpenCVManipulations::GetVideoFrameRate(const cv::VideoCapture& cap) {
+	// CV_CAP_PROP_FPS ou cv::CAP_PROP_FPS retorna a taxa de quadros
+	double fps = cap.get(cv::CAP_PROP_FPS);
+	return fps;
 }

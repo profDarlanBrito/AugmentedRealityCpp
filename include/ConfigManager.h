@@ -14,6 +14,7 @@ public:
 	int windowWidth;
 	int windowHeight;
 	std::string runMode;
+	std::string opencvMode;
 	std::string VertexShaderFileName;
 	std::string FragmentShaderFileName;
 	glm::vec3 backgroundColor;
@@ -45,6 +46,9 @@ public:
     }
 
     bool Load();
+	std::string getString(const std::string& key) const;
+	int getInt(const std::string& key) const;
+	bool getBool(const std::string& key) const;
 	ConfigManager& operator=(const ConfigManager& other);
 private:
     YAML::Node config;

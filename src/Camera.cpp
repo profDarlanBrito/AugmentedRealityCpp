@@ -1,6 +1,5 @@
 #include "Camera.h"
-#include <glm/gtc/matrix_transform.hpp>
-#include <algorithm> // Para std::clamp
+
 
 // Change std::clamp by an utility function for compatibility with C++ versions prior to C++17
 template <typename T>
@@ -25,24 +24,52 @@ T clamp(T value, T minVal, T maxVal) {
 */
 void Camera::processMouseMovement(float xoffset, float yoffset)
 {
-    float sensitivity = 1.0f;
     xoffset *= sensitivity;
     yoffset *= sensitivity;
 
-    mYaw   += xoffset;
+    mYaw   -= xoffset;
     mPitch += yoffset;
 
     // Use a função clamp local
-    mPitch = clamp(mPitch, -89.0f, 89.0f);
+    mPitch = clamp(mPitch, -180.0f, 180.0f);
 
     glm::vec3 front;
     front.x = cos(glm::radians(mYaw)) * cos(glm::radians(mPitch));
     front.y = sin(glm::radians(mPitch));
     front.z = sin(glm::radians(mYaw)) * cos(glm::radians(mPitch));
     mFront = glm::normalize(front);
+	//mFront = glm::normalize(glm::vec3(0.0f) - front);
 	mViewDirection = mFront;
+	mEye = mFront * mRadius; // Atualiza a posição da câmera com base no raio
+
     mRight = glm::normalize(glm::cross(mFront, mWorldUp));
-    mUpDirection = glm::normalize(glm::vec3(glm::rotate(glm::mat4(1.0f), glm::radians(mRoll), mFront) * glm::vec4(mWorldUp, 0.0f)));
+    //mUpDirection = glm::normalize(glm::vec3(glm::rotate(glm::mat4(1.0f), glm::radians(mRoll), mFront) * glm::vec4(mWorldUp, 0.0f)));
+	//std::cout << "Camera::processMouseMovement: mYaw: " << mYaw << ", mPitch: " << mPitch << ", mRoll: " << mRoll << std::endl;
 }
 
+/**
+    * @brief Atualiza os vetores de direção e para cima da câmera a partir dos ângulos de roll, pitch e yaw.
+    * @param yaw Ângulo de rotação em torno do eixo Y (em graus).
+    * @param pitch Ângulo de rotação em torno do eixo X (em graus).
+    * @param roll Ângulo de rotação em torno do eixo Z (em graus).
+    */
+void Camera::updateDirectionFromAngles(float yaw, float pitch, float roll) {
+    mYaw = yaw;
+    mPitch = pitch;
+    mRoll = roll;
 
+    // Calcula o vetor frente (direção)
+    glm::vec3 front;
+    front.x = cos(glm::radians(mYaw)) * cos(glm::radians(mPitch));
+    front.y = sin(glm::radians(mPitch));
+    front.z = sin(glm::radians(mYaw)) * cos(glm::radians(mPitch));
+    mFront = glm::normalize(front);
+    mViewDirection = mFront;
+
+    // Calcula o vetor direita
+    mRight = glm::normalize(glm::cross(mFront, mWorldUp));
+
+    // Calcula o vetor para cima com roll
+    glm::mat4 rollMat = glm::rotate(glm::mat4(1.0f), glm::radians(mRoll), mFront);
+    mUpDirection = glm::normalize(glm::vec3(rollMat * glm::vec4(mWorldUp, 0.0f)));
+}
