@@ -1,5 +1,17 @@
 #include "Colmap.hpp"
 
+/* It's necessary to have a configuration file for each step of the COLMAP pipeline like this converted to C++ code:
+* def extract_features(colmap_exec, workspace_folder, image_folder):
+    # Extract features
+    with open(feature_extractor_file, "r") as feature_config_file_read:
+        feature_extractor_config_str = feature_config_file_read.readlines()
+        feature_extractor_config_str[3] = f"database_path={workspace_folder}/database.db\n"
+        feature_extractor_config_str[4] = f"image_path={image_folder}\n"
+
+    feature_config_path = write_config_file(feature_extractor_file, workspace_folder, feature_extractor_config_str)
+    execute_colmap_command(colmap_exec, "feature_extractor", feature_config_path)
+*/
+
 void Colmap::LoadFromConfig(const ConfigManager& config) {
     database_path    = config.getString("colmap_database_path");
     image_path       = config.getString("colmap_image_path");
