@@ -28,7 +28,7 @@ bool Colmap::IsColmapInPath() const {
 }
 void Colmap::RunCommandLine(const ConfigManager& config) {
     LoadFromConfig(config);
-	std::string colmapPath = "colmap"; // Assumindo que 'colmap' está no PATH do sistema
+	std::string colmapPath = "colmap"; // Assuming 'colmap' is in the system PATH
     if (!IsColmapInPath()) {
         std::cerr << "Error: 'colmap' command not found in PATH. Please ensure COLMAP is installed and added to your system PATH or configure the path in the Config.yaml file" << std::endl;
 		colmapPath = config.getString("colmap_executable_path");

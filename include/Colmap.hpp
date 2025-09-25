@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <iostream>
-#include "ConfigManager.h"
+#include <ConfigManager.h>
 //#ifdef _WIN32
 //#include <windows.h>
 //#else

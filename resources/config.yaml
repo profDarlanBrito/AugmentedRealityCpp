@@ -38,6 +38,18 @@ colmap_image_path: ../../../Teste_Colmap/Imagens_Clio
 colmap_model_path: ../../../Teste_Colmap/sparse/0
 colmap_workspace_path: ../../../Teste_Colmap/WS
 colmap_output_path: ../../../Teste_Colmap/output
+
+feature_extractor_file :  ../../resource/feature_extractor.ini
+exhaustive_file :  ../../resource/exhaustive_matcher.ini
+mapper_file :  ../../resource/mapper.ini
+point_triangulator_file :  ../../resource/point_triangulator.ini
+image_undistorter_file :  ../../resource/image_undistorter.ini
+patch_match_stereo_file :  ../../resource/patch_match_stereo.ini
+stereo_fusion_file :  ../../resource/stereo_fusion.ini
+poisson_mesher_file :  ../../resource/poisson_mesher.ini
+model_aligner_file :  ../../resource/model_aligner.ini
+model_converter_file :  ../../resource/model_converter.ini
+
 # Output types can be 'COLMAP', 'PMVS', 'CMP-MVS'
 colmap_output_type: COLMAP
 colmap_num_threads: 4
