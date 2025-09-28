@@ -2,15 +2,12 @@
 #include <string>
 #include <iostream>
 #include <ConfigManager.h>
-//#ifdef _WIN32
-//#include <windows.h>
-//#else
-//#include <unistd.h>
-//#endif
+#include <fstream>
+#include <sstream>
 
 class Colmap {
 public:
-    // Campos de configuração
+	// Configuration parameters
     std::string database_path;
     std::string image_path;
     std::string output_path;
@@ -23,11 +20,13 @@ public:
 
     Colmap() = default;
 
-    // Carrega os campos do ConfigManager
+	// Load configuration from ConfigManager
     void LoadFromConfig(const ConfigManager& config);
 
     bool IsColmapInPath() const;
 
-    // Executa o pipeline COLMAP via linha de comando (PowerShell)
+    // Run the pipeline for COLMAP using command line (PowerShell)
     void RunCommandLine(const ConfigManager& config);
+
+    std::string GetColmapCommand(const ConfigManager& config, const std::string Key) const;
 };

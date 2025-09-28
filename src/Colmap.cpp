@@ -108,3 +108,28 @@ void Colmap::RunCommandLine(const ConfigManager& config) {
     std::cout << cmd << std::endl;
     std::system(cmd.c_str());
 }
+
+std::string Colmap::GetColmapCommand(const ConfigManager& config, const std::string Key) const
+{
+    // Obtém o caminho do arquivo de configuração do feature extractor
+    std::string fileWithCommands = config.getString(Key);
+
+    std::ifstream file(fileWithCommands);
+    if (!file.is_open()) {
+        std::cerr << "It's not possible to open: " << fileWithCommands << std::endl;
+        return "";
+    }
+
+    std::ostringstream commandStream;
+    std::string line;
+    while (std::getline(file, line)) {
+		// Ignore empty lines
+        if (!line.empty()) {
+            commandStream << line << " ";
+        }
+    }
+    file.close();
+
+    // Return the complete command line to be used with std::system
+    return commandStream.str();
+}

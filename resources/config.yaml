@@ -2,10 +2,10 @@
 # This file contains settings for the application, such as window size and fullscreen mode.
 
 #General settings
-# Run mode can be 'OpenCV', 'OpenGL' or 'AugmentedReality'
-run_mode: COLMAP
-opencv_mode: TESTING
-frame_rate: 6 # Frame rate for video processing. Must be between 1 and 30.
+# Run mode can be 'OpenCV', 'OpenGL' or 'COLMAP'
+run_mode: OpenCV
+opencv_mode: framing
+frame_rate: 3 # Frame rate for video processing. Must be between 1 and 30.
 
 # Path to the input image or video file
 video_path: ../../../Teste_Colmap/Imagens_Clio/Clio2.mp4

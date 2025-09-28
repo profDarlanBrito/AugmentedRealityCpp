@@ -7,7 +7,7 @@ message(STATUS "Compilando para o sistema operacional: ${CMAKE_SYSTEM_NAME}")
 
 include(FetchContent)
 
-# Habilite a Recarga Dinâmica para compiladores MSVC, se houver suporte.
+# Enable dinamyc charge for MSVC compilers, if there is support.
 if (POLICY CMP0141)
   cmake_policy(SET CMP0141 NEW)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
@@ -15,6 +15,8 @@ endif()
 
 project ("AugmentedReality")
 
+# Define the output directory to the executable (binary)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 # Adicione a origem ao executável deste projeto.
 add_executable (AugmentedReality 
