@@ -1,2 +1,5 @@
-# Não exportar os .gitkeep em releases/arquivos compactados
-**/.gitkeep export-ignore
+# Não exportar .gitkeep em bin/ e subpastas
+bin/**/*.gitkeep export-ignore
+
+# Não exportar .gitkeep em videos/ e subpastas
+videos/**/*.gitkeep export-ignore
