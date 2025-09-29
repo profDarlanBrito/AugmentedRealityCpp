@@ -1,0 +1,2 @@
+# Não exportar os .gitkeep em releases/arquivos compactados
+**/.gitkeep export-ignore
