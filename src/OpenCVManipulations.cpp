@@ -54,8 +54,8 @@ void OpenCVManipulations::Run(std::string option) {
 		opcvm.MainTests();
 	}
 	else if (strcmp(option.c_str(), "framing") == 0) {
-		opcvm.SaveVideoFrames("C:/Users/dnune/OneDrive/Documentos/Visual Studio 2022/Projects/AugmentedReality/Teste_Colmap/Imagens_Clio/Clio.mp4",
-			"C:/Users/dnune/OneDrive/Documentos/Visual Studio 2022/Projects/AugmentedReality/Teste_Colmap/Imagens_Clio");
+		opcvm.SaveVideoFrames("../../../videos/Clio.mp4",
+			"../../../videos/frames");
 	}
 	else {
 		std::cerr << "Invalid option. Use 'test' or 'framing'." << std::endl;
@@ -73,7 +73,7 @@ void OpenCVManipulations::SaveVideoFrames(const std::string& videoPath, const st
         return;
     }
 
-    // Extrai o nome base do arquivo de vídeo (sem caminho e extensão)
+    // Extrai o nome base do arquivo de vï¿½deo (sem caminho e extensï¿½o)
     size_t lastSlash = videoPath.find_last_of("/\\");
     std::string filename = (lastSlash == std::string::npos) ? videoPath : videoPath.substr(lastSlash + 1);
     size_t lastDot = filename.find_last_of('.');
@@ -109,7 +109,7 @@ void OpenCVManipulations::SaveVideoFrames(const std::string& videoPath, const st
 		return;
 	}
 
-	// Extrai o nome base do arquivo de vídeo (sem caminho e extensão)
+	// Extrai o nome base do arquivo de vï¿½deo (sem caminho e extensï¿½o)
 	size_t lastSlash = videoPath.find_last_of("/\\");
 	std::string filename = (lastSlash == std::string::npos) ? videoPath : videoPath.substr(lastSlash + 1);
 	size_t lastDot = filename.find_last_of('.');
