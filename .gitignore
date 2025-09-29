@@ -1,5 +1,6 @@
 # Ignora tudo dentro da pasta video (Terá um Link ou script para que videos sejam baixados pelo usario e adicionados a pasta)
 *.mp4
+*.png
 
 # Pastas de configuração do VSCode
 .vscode/
