@@ -1,0 +1,20 @@
+# Ignora todos os arquivos .gitkeep em qualquer pasta
+*.gitkeep
+
+# Pastas de configuração do VSCode
+.vscode/
+
+# Pastas de configuração das IDEs da JetBrains (CLion, IntelliJ, PyCharm)
+.idea/
+
+# Arquivos de configuração do Eclipse
+.project
+.settings/
+
+# Arquivos temporários do editor/terminal
+*.swp
+*~
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
