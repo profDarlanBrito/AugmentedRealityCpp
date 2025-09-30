@@ -16,7 +16,7 @@ endif()
 project ("AugmentedReality")
 
 # Define the output directory to the executable (binary)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 # Adicione a origem ao executável deste projeto.
 add_executable (AugmentedReality 
