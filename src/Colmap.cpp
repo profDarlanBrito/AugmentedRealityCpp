@@ -51,8 +51,9 @@ void Colmap::RunCommandLine(const ConfigManager& config) {
     std::string intrinsics = "--ImageReader.single_camera 1";
 
     // 1. feature_extractor
-    cmd = colmapPath + " feature_extractor --database_path \"" + database_path +
-          "\" --image_path \"" + image_path + "\" " + intrinsics;
+    /*cmd = colmapPath + " feature_extractor --database_path \"" + database_path +
+          "\" --image_path \"" + image_path + "\" " + intrinsics;*/
+	cmd = colmapPath + " feature_extractor " + "--project_path " + config.getString("feature_extractor_file");
     std::cout << cmd << std::endl;
     std::system(cmd.c_str());
 

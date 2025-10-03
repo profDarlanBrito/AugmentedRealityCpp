@@ -33,22 +33,22 @@ mouse_move_enabled: false
 
 # COLMAP settings
 colmap_executable_path: /usr/local/bin/colmap
-colmap_database_path: ../../../colmap_run/database.db
-colmap_image_path: ../../../colmap_run/colmap_images
-colmap_model_path: ../../../colmap_run/output/sparse/0
-colmap_workspace_path: ../../../colmap_run/WS
-colmap_output_path: ../../../colmap_run/output
+colmap_database_path: ../colmap_run/database.db
+colmap_image_path: ../colmap_run/colmap_images
+colmap_model_path: ../colmap_run/output/sparse/0
+colmap_workspace_path: ../colmap_run/WS
+colmap_output_path: ../colmap_run/output
 
-feature_extractor_file :  ../../../resource/feature_extractor.ini
-exhaustive_file :  ../../../resource/exhaustive_matcher.ini
-mapper_file :  ../../../resource/mapper.ini
-point_triangulator_file :  ../../../resource/point_triangulator.ini
-image_undistorter_file :  ../../../resource/image_undistorter.ini
-patch_match_stereo_file :  ../../../resource/patch_match_stereo.ini
-stereo_fusion_file :  ../../../resource/stereo_fusion.ini
-poisson_mesher_file :  ../../../resource/poisson_mesher.ini
-model_aligner_file :  ../../../resource/model_aligner.ini
-model_converter_file :  ../../../resource/model_converter.ini
+feature_extractor_file :  ../resource/feature_extractor.ini
+exhaustive_file :  ../resource/exhaustive_matcher.ini
+mapper_file :  ../resource/mapper.ini
+point_triangulator_file :  ../resource/point_triangulator.ini
+image_undistorter_file :  ../resource/image_undistorter.ini
+patch_match_stereo_file :  ../resource/patch_match_stereo.ini
+stereo_fusion_file :  ../resource/stereo_fusion.ini
+poisson_mesher_file :  ../resource/poisson_mesher.ini
+model_aligner_file :  ../resource/model_aligner.ini
+model_converter_file :  ../resource/model_converter.ini
 
 # Output types can be 'COLMAP', 'PMVS', 'CMP-MVS'
 colmap_output_type: COLMAP
