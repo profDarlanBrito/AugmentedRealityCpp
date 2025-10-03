@@ -5,6 +5,7 @@ vcpkg.json
 *.dll
 *.pdb
 *.exe
+*.ilk
 
 # Pastas de configuração do VSCode
 .vscode/
