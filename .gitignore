@@ -3,6 +3,8 @@
 /videos/frames/*.png
 vcpkg.json
 *.dll
+*.pdb
+*.exe
 
 # Pastas de configuração do VSCode
 .vscode/
