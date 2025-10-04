@@ -20,7 +20,7 @@
 
 void OpenCVManipulations::MainTests() {
 	// Load an image from file
-	cv::Mat image = cv::imread("../../../images/simprao.jpg");
+	cv::Mat image = cv::imread("../images/simprao.jpg");
 	if (image.empty()) {
 		std::cerr << "Could not open or find the image!" << std::endl;
 		return;
@@ -54,8 +54,8 @@ void OpenCVManipulations::Run(std::string option) {
 		opcvm.MainTests();
 	}
 	else if (strcmp(option.c_str(), "framing") == 0) {
-		opcvm.SaveVideoFrames("../../../videos/Clio.mp4",
-			"../../../videos/frames");
+		opcvm.SaveVideoFrames("../videos/Clio.mp4",
+			"../videos/frames");
 	}
 	else {
 		std::cerr << "Invalid option. Use 'test' or 'framing'." << std::endl;

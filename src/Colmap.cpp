@@ -40,74 +40,86 @@ bool Colmap::IsColmapInPath() const {
 }
 void Colmap::RunCommandLine(const ConfigManager& config) {
     LoadFromConfig(config);
-	std::string colmapPath = "colmap"; // Assuming 'colmap' is in the system PATH
+    std::string colmapPath = "colmap";
     if (!IsColmapInPath()) {
         std::cerr << "Error: 'colmap' command not found in PATH. Please ensure COLMAP is installed and added to your system PATH or configure the path in the Config.yaml file" << std::endl;
-		colmapPath = config.getString("colmap_executable_path");
-	}
+        colmapPath = config.getString("colmap_executable_path");
+    }
     std::string cmd;
-
-    // Todas as imagens usam os mesmos parâmetros intrínsecos
     std::string intrinsics = "--ImageReader.single_camera 1";
 
     // 1. feature_extractor
-    /*cmd = colmapPath + " feature_extractor --database_path \"" + database_path +
-          "\" --image_path \"" + image_path + "\" " + intrinsics;*/
-	cmd = colmapPath + " feature_extractor --project_path " + config.getString("feature_extractor_file");
+    cmd = colmapPath + " feature_extractor --project_path " + config.getString("feature_extractor_file");
     std::cout << cmd << std::endl;
-    std::system(cmd.c_str());
+    if (std::system(cmd.c_str()) != 0) {
+        std::cerr << "Erro ao executar: " << cmd << std::endl;
+        return;
+    }
 
     // 2. exhaustive_matcher
-    cmd = colmapPath + " exhaustive_matcher --database_path \"" + database_path + "\"";
+    cmd = colmapPath + " exhaustive_matcher --project_path " + config.getString("exhaustive_matcher_file");
     std::cout << cmd << std::endl;
-    std::system(cmd.c_str());
+    if (std::system(cmd.c_str()) != 0) {
+        std::cerr << "Erro ao executar: " << cmd << std::endl;
+        return;
+    }
 
     // 3. mkdir para pasta sparse
     cmd = "mkdir \"" + output_path + "/sparse\"";
     std::cout << cmd << std::endl;
-    std::system(cmd.c_str());
+    if (std::system(cmd.c_str()) != 0) {
+        std::cerr << "Erro ao executar: " << cmd << std::endl;
+        return;
+    }
 
     // 4. mapper
-    cmd = colmapPath + " mapper --database_path \"" + database_path +
-          "\" --image_path \"" + image_path +
-          "\" --output_path \"" + output_path + "/sparse\"";
+    cmd = colmapPath + " mapper --project_path " + config.getString("mapper_file");
     std::cout << cmd << std::endl;
-    std::system(cmd.c_str());
+    if (std::system(cmd.c_str()) != 0) {
+        std::cerr << "Erro ao executar: " << cmd << std::endl;
+        return;
+    }
 
     // 5. image_undistorter
-    cmd = colmapPath + " image_undistorter --image_path \"" + image_path +
-          "\" --input_path \"" + output_path + "/sparse/0\""
-          " --output_path \"" + output_path + "/dense\""
-          " --output_type " + output_type;
+    cmd = colmapPath + " image_undistorter --project_path " + config.getString("image_undistorter_file");
     std::cout << cmd << std::endl;
-    std::system(cmd.c_str());
+    if (std::system(cmd.c_str()) != 0) {
+        std::cerr << "Erro ao executar: " << cmd << std::endl;
+        return;
+    }
 
     // 6. patch_match_stereo
-    cmd = colmapPath + " patch_match_stereo --workspace_path \"" + output_path + "/dense\""
-          " --workspace_format " + workspace_format +
-          " --PatchMatchStereo.geom_consistency " + (geom_consistency ? "true" : "false");
+    cmd = colmapPath + " patch_match_stereo --project_path " + config.getString("patch_match_stereo_file");
     std::cout << cmd << std::endl;
-    std::system(cmd.c_str());
+    if (std::system(cmd.c_str()) != 0) {
+        std::cerr << "Erro ao executar: " << cmd << std::endl;
+        return;
+    }
 
     // 7. stereo_fusion
-    cmd = colmapPath + " stereo_fusion --workspace_path \"" + output_path + "/dense\""
-          " --workspace_format " + workspace_format +
-          " --input_type " + input_type +
-          " --output_path \"" + output_path + "/dense/fused.ply\"";
+    cmd = colmapPath + " stereo_fusion --project_path " + config.getString("stereo_fusion_file");
     std::cout << cmd << std::endl;
-    std::system(cmd.c_str());
+    if (std::system(cmd.c_str()) != 0) {
+        std::cerr << "Erro ao executar: " << cmd << std::endl;
+        return;
+    }
 
     // 8. poisson_mesher
-    cmd = colmapPath + " poisson_mesher --input_path \"" + output_path + "/dense/fused.ply\""
-          " --output_path \"" + output_path + "/dense/meshed-poisson.ply\"";
+    cmd = colmapPath + " poisson_mesher --project_path " + config.getString("poisson_mesher_file");
     std::cout << cmd << std::endl;
-    std::system(cmd.c_str());
+    if (std::system(cmd.c_str()) != 0) {
+        std::cerr << "Erro ao executar: " << cmd << std::endl;
+        return;
+    }
 
     // 9. delaunay_mesher
     cmd = colmapPath + " delaunay_mesher --input_path \"" + output_path + "/dense\""
           " --output_path \"" + output_path + "/dense/meshed-delaunay.ply\"";
     std::cout << cmd << std::endl;
-    std::system(cmd.c_str());
+    if (std::system(cmd.c_str()) != 0) {
+        std::cerr << "Erro ao executar: " << cmd << std::endl;
+        return;
+    }
 }
 
 std::string Colmap::GetColmapCommand(const ConfigManager& config, const std::string Key) const
