@@ -16,7 +16,7 @@ using namespace std;
 int main()
 {
 
-	ConfigManager cfg("../../../resources/config.yaml");
+	ConfigManager cfg("../resources/config.yaml");
 
     if (cfg.runMode == "OpenCV") {
 		OpenCVManipulations::Run(cfg.opencvMode);
