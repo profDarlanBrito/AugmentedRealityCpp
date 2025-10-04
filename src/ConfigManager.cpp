@@ -12,8 +12,8 @@ ConfigManager::ConfigManager() {
     windowHeight = 600;
     runMode = "OpenGL";
 	opencvMode = "framing";
-    VertexShaderFileName = "../../../shaders/vertex_shader.glsl";
-    FragmentShaderFileName = "../../../shaders/fragment_shader.glsl";
+    VertexShaderFileName = "../shaders/vertex_shader.glsl";
+    FragmentShaderFileName = "../shaders/fragment_shader.glsl";
     cameraPosition = glm::vec3(0.0f, 0.0f, 5.0f);
     cameraFov = 45.0f;
     cameraNear = 0.1f;
@@ -37,8 +37,8 @@ ConfigManager::ConfigManager(const std::string& filename) {
     windowWidth = 800;
     windowHeight = 600;
     runMode = "OpenGL";
-    VertexShaderFileName = "../../../shaders/vertex_shader.glsl";
-    FragmentShaderFileName = "../../../shaders/fragment_shader.glsl";
+    VertexShaderFileName = "../shaders/vertex_shader.glsl";
+    FragmentShaderFileName = "../shaders/fragment_shader.glsl";
 	Load();
 }
 

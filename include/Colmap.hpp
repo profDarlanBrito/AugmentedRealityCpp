@@ -5,6 +5,16 @@
 #include <fstream>
 #include <sstream>
 
+/**
+* @class Colmap
+ * @brief A class to manage and run COLMAP commands based on configuration settings.
+ * 
+ * This class provides methods to load configuration parameters, check if COLMAP is in the system path,
+ * and run COLMAP commands using the command line interface. It supports various configuration options
+ * such as database path, image path, output path, and more.
+ * 
+ * @see ConfigManager
+ */
 class Colmap {
 public:
 	// Configuration parameters
