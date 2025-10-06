@@ -48,7 +48,6 @@ void Colmap::RunCommandLine(const ConfigManager& config) {
         colmapPath = config.getString("colmap_executable_path");
     }
     std::string cmd;
-    std::string intrinsics = "--ImageReader.single_camera 1";
 
     // 1. feature_extractor
     cmd = colmapPath + " feature_extractor --project_path " + config.getString("feature_extractor_file");
@@ -128,6 +127,38 @@ void Colmap::RunCommandLine(const ConfigManager& config) {
         std::cerr << "Erro on copy files from: " << dirPath << " to " << output_path << ": " << e.what() << std::endl;
         return;
     }
+    
+    // 10. Apagar pasta images conforme output_path do poisson_mesher.ini
+    std::string iniPath = config.getString("poisson_mesher_file");
+    std::ifstream iniFile(iniPath);
+    std::string outputDir;
+    if (iniFile.is_open()) {
+        std::string line;
+        while (std::getline(iniFile, line)) {
+            if (line.rfind("output_path=", 0) == 0) {
+                std::string value = line.substr(std::string("output_path=").size());
+                size_t lastSlash = value.find_last_of("/\\");
+                if (lastSlash != std::string::npos) {
+                    outputDir = value.substr(0, lastSlash);
+                }
+                break;
+            }
+        }
+        iniFile.close();
+    }
+    if (!outputDir.empty()) {
+        fs::path imagesDir = fs::path(outputDir) / "images";
+        try {
+            if (fs::exists(imagesDir) && fs::is_directory(imagesDir)) {
+                fs::remove_all(imagesDir);
+                std::cout << "Pasta 'images' removida: " << imagesDir << std::endl;
+            }
+        }
+        catch (const std::exception& e) {
+            std::cerr << "Erro ao remover pasta 'images': " << e.what() << std::endl;
+        }
+    }
+    
     /* 9. delaunay_mesher
     cmd = colmapPath + " delaunay_mesher --input_path \"" + output_path + "/dense\""
           " --output_path \"" + output_path + "/dense/meshed-delaunay.ply\"";
