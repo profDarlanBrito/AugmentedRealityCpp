@@ -4,6 +4,7 @@
 #include <ConfigManager.h>
 #include <fstream>
 #include <sstream>
+#include <filesystem>
 
 /**
 * @class Colmap

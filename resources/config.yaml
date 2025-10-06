@@ -5,7 +5,7 @@
 # Run mode can be 'OpenCV', 'OpenGL' or 'COLMAP'
 run_mode: COLMAP
 opencv_mode: testing
-frame_rate: 3 # Frame rate for video processing. Must be between 1 and 30.
+frame_rate: 4 # Frame rate for video processing. Must be between 1 and 30.
 
 # Path to the input image or video file
 video_path: D:/Teste_Colmap/Imagens_Clio/Clio.mp4

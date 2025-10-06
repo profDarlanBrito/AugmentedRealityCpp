@@ -1,5 +1,7 @@
 #include "Colmap.hpp"
 
+namespace fs = std::filesystem;
+
 /* It's necessary to have a configuration file for each step of the COLMAP pipeline like this converted to C++ code:
 * def extract_features(colmap_exec, workspace_folder, image_folder):
     # Extract features
@@ -112,14 +114,28 @@ void Colmap::RunCommandLine(const ConfigManager& config) {
         return;
     }
 
-    // 9. delaunay_mesher
+    // 9. Copying files from path get from poisson_mesher_file to output_path
+    std::string resourcesPath = config.getString("poisson_mesher_file");
+    std::string dirPath = resourcesPath.substr(0, resourcesPath.find_last_of("/\\"));
+    try {
+        for (const auto& entry : fs::directory_iterator(dirPath)) {
+            if (fs::is_regular_file(entry.path())) {
+                fs::copy(entry.path(), fs::path(output_path) / entry.path().filename(), fs::copy_options::overwrite_existing);
+            }
+        }
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Erro on copy files from: " << dirPath << " to " << output_path << ": " << e.what() << std::endl;
+        return;
+    }
+    /* 9. delaunay_mesher
     cmd = colmapPath + " delaunay_mesher --input_path \"" + output_path + "/dense\""
           " --output_path \"" + output_path + "/dense/meshed-delaunay.ply\"";
     std::cout << cmd << std::endl;
     if (std::system(cmd.c_str()) != 0) {
         std::cerr << "Erro ao executar: " << cmd << std::endl;
         return;
-    }
+    }*/
 }
 
 std::string Colmap::GetColmapCommand(const ConfigManager& config, const std::string Key) const
