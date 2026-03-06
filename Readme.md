@@ -52,14 +52,19 @@ Antes de executar os scripts, é necessário garantir que eles tenham permissão
 No terminal, abra a pasta raiz do projeto (onde os scripts estão localizados) e rode:
 ```sh
 # Dar permissão de execução aos scripts
-chmod +x dependencies.sh
-chmod +x systemLinuxDependencies.sh
+chmod +x dependencies/dependencies.sh
+
+# Caso o sistema seja Ubuntu
+chmod +x dependencies/ubuntu/systemDependencies.sh
+
+# Caso o sistema seja Zorin
+chmod +x dependencies/zorin/sdl3.sh dependencies/zorin/systemDependencies.sh
 
 # Executar o script para instalar dependências relacionadas ao vcpkg
 ./dependencies.sh
 
 # Executar o script para instalar dependências do sistema
-./systemLinuxDependencies.sh
+./systemDependencies.sh
 
 ```
 
